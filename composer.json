@@ -1,0 +1,10 @@
+{
+    "name": "christianjbrown/php-cs-fixer-rule-sets",
+    "type": "library",
+    "require": {
+        "php": "~8.2",
+        "ext-mbstring": "*",
+        "friendsofphp/php-cs-fixer": "dev-master"
+    },
+    "minimum-stability": "dev"
+}
