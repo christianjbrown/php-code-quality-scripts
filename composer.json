@@ -15,5 +15,8 @@
         "bin/php-cs-fix",
         "bin/php-cs-fix-diff"
     ],
+    "config": {
+        "bin-dir": "bin"
+    },
     "minimum-stability": "dev"
 }

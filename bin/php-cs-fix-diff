@@ -1,7 +1,8 @@
 #!/bin/bash
 
-ROOT_DIR=$(dirname "${BASH_SOURCE[0]}")/..
-PHP_CS_FIXER=$ROOT_DIR/vendor/bin/php-cs-fixer
+THIS_DIR=$(dirname "${BASH_SOURCE[0]}")
+ROOT_DIR="$THIS_DIR/.."
+PHP_CS_FIXER="$THIS_DIR/php-cs-fixer"
 
 SINCE_COMMIT=${1:-HEAD}
 
@@ -13,44 +14,33 @@ if [ -z "$PHP_CS_FIX_CONFIG_RISKY" ]; then
   PHP_CS_FIX_CONFIG_RISKY=$ROOT_DIR/rule-sets/risky.php
 fi
 
-pushd "$(git rev-parse --show-toplevel)" || exit
+function fix() {
+	if [[ $1 == *\.php ]]; then
+		if php -l "$1" > /dev/null; then
+		  echo "Fixing $1"
+			$PHP_CS_FIXER fix "$1" --config="$2"
+		else
+			echo "\033[0;31mLinting fail in $1\033[0m"
+			exit 1
+		fi
+	fi
+}
+
+pushd "$(git rev-parse --show-toplevel)" > /dev/null|| exit
 
 # Existing files
 for file in $(git diff --name-only --diff-filter=MR "$SINCE_COMMIT"); do
-	# git diff allow us to use --diff-filter and a commit, where as git status and git ls-files does not
-	if [[ $file == *\.php ]]; then
-		if php -l "$file"; then
-			$PHP_CS_FIXER fix "$file" --config="$PHP_CS_FIX_CONFIG_SAFE"
-		else
-			echo "\033[0;31mLinting fail in $file\033[0m"
-			exit
-		fi
-	fi
+  fix "$file" "$PHP_CS_FIX_CONFIG_SAFE";
 done
 
 # New files (can be riskier rules)
 for file in $(git diff --name-only --diff-filter=ACX "$SINCE_COMMIT"); do
-	# git diff allow us to use --diff-filter and a commit, where as git status and git ls-files does not
-	if [[ $file == *\.php ]]; then
-		if php -l "$file"; then
-			$PHP_CS_FIXER fix "$file" --config="$PHP_CS_FIX_CONFIG_RISKY"
-		else
-			echo "\033[0;31mLinting fail in $file\033[0m"
-			exit 1
-		fi
-	fi
+	fix "$file" "$PHP_CS_FIX_CONFIG_RISKY";
 done
 
 # Untracked files (can be riskier rules)
-for file in $(git ls-files -o); do
-	if [[ $file == *\.php ]]; then
-		if php -l "$file"; then
-			$PHP_CS_FIXER fix "$file" --config="$PHP_CS_FIX_CONFIG_RISKY"
-		else
-			echo "\033[0;31mLinting fail in $file\033[0m"
-			exit 1
-		fi
-	fi
+for file in $(git ls-files --others --exclude-standard); do
+  fix "$file" "$PHP_CS_FIX_CONFIG_RISKY";
 done
 
-popd || exit
+popd > /dev/null || exit
