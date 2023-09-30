@@ -1,0 +1,52 @@
+#!/bin/bash
+
+ROOTDIR=$(dirname "$BASH_SOURCE")/..
+PHPCSFIXER=./vendor/bin/php-cs-fixer
+
+SINCE_COMMIT=${1:-HEAD}
+
+# For now, we use the same config for safe and risky, see README.md
+CONFIG_SAFE=$ROOTDIR/risky.php
+CONFIG_RISKY=$CONFIG_SAFE
+
+pushd `git rev-parse --show-toplevel`
+
+# Existing files
+for file in `git diff --name-only --diff-filter=MR $SINCE_COMMIT`; do
+	# git diff allow us to use --diff-filter and a commit, where as git status and git ls-files does not
+	if [[ $file == *\.php ]]; then
+		if php -l $file; then
+			$PHPCSFIXER fix $file -vvv --config=$CONFIG_SAFE
+		else
+			echo "\033[0;31mLinting fail in $file\033[0m"
+			exit
+		fi
+	fi
+done
+
+# New files (can be riskier rules)
+for file in `git diff --name-only --diff-filter=ACX $SINCE_COMMIT`; do
+	# git diff allow us to use --diff-filter and a commit, where as git status and git ls-files does not
+	if [[ $file == *\.php ]]; then
+		if php -l $file; then
+			$PHPCSFIXER fix $file -vvv --config=$CONFIG_RISKY
+		else
+			echo "\033[0;31mLinting fail in $file\033[0m"
+			exit 1
+		fi
+	fi
+done
+
+# Untracked files (can be riskier rules)
+for file in `git ls-files -o`; do
+	if [[ $file == *\.php ]]; then
+		if php -l $file; then
+			$PHPCSFIXER fix $file -vvv --show-progress=estimating-max --config=$CONFIG_RISKY
+		else
+			echo "\033[0;31mLinting fail in $file\033[0m"
+			exit 1
+		fi
+	fi
+done
+
+popd
