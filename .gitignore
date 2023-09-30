@@ -1,5 +1,6 @@
 *.iml
 .DS_Store
 .idea
+bin/php-cs-fixer
 composer.lock
 vendor
