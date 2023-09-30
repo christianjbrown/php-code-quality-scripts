@@ -1,6 +1,0 @@
-#!/bin/bash
-ROOTDIR=$(dirname "$BASH_SOURCE")/..
-FILES=${1:-$(pwd)} 
-CONFIG=$ROOTDIR/risky.php
-echo "Running php-cs-fixer on $FILES with config from $CONFIG ..."
-$ROOTDIR/vendor/bin/php-cs-fixer fix $FILES -vvv --config=$CONFIG

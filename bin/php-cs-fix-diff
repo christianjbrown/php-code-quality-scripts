@@ -1,13 +1,17 @@
 #!/bin/bash
 
-ROOTDIR=$(dirname "$BASH_SOURCE")/..
-PHPCSFIXER=./vendor/bin/php-cs-fixer
+ROOT_DIR=$(dirname "$BASH_SOURCE")/..
+PHP_CS_FIXER=$ROOT_DIR/vendor/bin/php-cs-fixer
 
 SINCE_COMMIT=${1:-HEAD}
 
-# For now, we use the same config for safe and risky, see README.md
-CONFIG_SAFE=$ROOTDIR/risky.php
-CONFIG_RISKY=$CONFIG_SAFE
+if [ -z "$PHP_CS_FIX_CONFIG_SAFE" ]; then
+  # For now, we use the same config for safe and risky, see README.md
+  PHP_CS_FIX_CONFIG_SAFE=$ROOT_DIR/rule-sets/risky.php
+fi
+if [ -z "$PHP_CS_FIX_CONFIG_RISKY" ]; then
+  PHP_CS_FIX_CONFIG_RISKY=$ROOT_DIR/rule-sets/risky.php
+fi
 
 pushd `git rev-parse --show-toplevel`
 
@@ -16,7 +20,7 @@ for file in `git diff --name-only --diff-filter=MR $SINCE_COMMIT`; do
 	# git diff allow us to use --diff-filter and a commit, where as git status and git ls-files does not
 	if [[ $file == *\.php ]]; then
 		if php -l $file; then
-			$PHPCSFIXER fix $file -vvv --config=$CONFIG_SAFE
+			$PHP_CS_FIXER fix $file -vvv --config=$PHP_CS_FIX_CONFIG_SAFE
 		else
 			echo "\033[0;31mLinting fail in $file\033[0m"
 			exit
@@ -29,7 +33,7 @@ for file in `git diff --name-only --diff-filter=ACX $SINCE_COMMIT`; do
 	# git diff allow us to use --diff-filter and a commit, where as git status and git ls-files does not
 	if [[ $file == *\.php ]]; then
 		if php -l $file; then
-			$PHPCSFIXER fix $file -vvv --config=$CONFIG_RISKY
+			$PHP_CS_FIXER fix $file -vvv --config=$PHP_CS_FIX_CONFIG_RISKY
 		else
 			echo "\033[0;31mLinting fail in $file\033[0m"
 			exit 1
@@ -41,7 +45,7 @@ done
 for file in `git ls-files -o`; do
 	if [[ $file == *\.php ]]; then
 		if php -l $file; then
-			$PHPCSFIXER fix $file -vvv --show-progress=estimating-max --config=$CONFIG_RISKY
+			$PHP_CS_FIXER fix $file -vvv --config=$PHP_CS_FIX_CONFIG_RISKY
 		else
 			echo "\033[0;31mLinting fail in $file\033[0m"
 			exit 1
