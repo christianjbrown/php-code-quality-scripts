@@ -6,13 +6,11 @@ That tool allows you to define rule sets of your own, building on top of existin
 
 There are also two wrapper scripts:
 
-* `php-cs-fix` is a very simple wrapper around PHP-CS-Fixer's own binary, to simplfy the command line and load the right config. If a directory is provided, it will process the entire directory, ignoring any Git status.
+* `php-cs-fix` is a very simple wrapper around PHP-CS-Fixer's own binary, to simplify the command line and load the right config. If a directory is provided, it will process the entire directory, ignoring any Git status.
 
 * `php-cs-fix-diff` runs PHP-CS-Fixer on files changed according to Git. It will loop through
    - all modified (`M`) and renamed (`R`) files, and runs the non-risky rule sets
-   - all added (`A`) , copied (`C`) files or untracked files (`?`), and runs the risky rule sets
-
-
+   - all added (`A`), copied (`C`) files or untracked files (`?`), and runs the risky rule sets
 
 ## :heavy_check_mark: Prerequisites
 
