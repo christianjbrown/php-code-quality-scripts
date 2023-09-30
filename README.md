@@ -39,7 +39,7 @@ PHP code can be ..messy, luckily, there's lots of tools to fix code automagicall
 In the project you wish to use these `php-cs-fixer` rules, require this library
 
 ```shell
-composer require --dev christianjbrown/php-cs-fixer-rule-sets dev-main
+composer require --dev christianjbrown/php-cs-fix-erwrapper dev-main
 ```
 
 
@@ -124,8 +124,6 @@ If you want to use `php-cs-fixer` and the wrapper shell scripts `php-cs-fix` and
 
 ## :computer: Usage
 
-
-
 ### Using `php-cs-fixer` directly
 
 See [PHP CS Fixer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer)'s own documentation, but to use these rule sets when fixing files, it's:
@@ -179,8 +177,6 @@ where
 
 
 
-
-
 ## Rule sets
 
 The rule sets can be found in the `rule-sets` directory.
@@ -200,6 +196,10 @@ Rule set: `safe.php`
 :x:  This is **currently removed**, as I only use PHP personally, and not in a company environment where I'd have to be more careful. Saves me maintaining something I no longer need.
 
 
+
+## :family: Related
+
+Also see [christianjbrown/phpcs-wrapper](https://github.com/christianjbrown/phpcs-wrapper) for a wrapper around [PHP CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer).
 
 
 
