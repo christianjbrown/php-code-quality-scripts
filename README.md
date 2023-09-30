@@ -43,7 +43,7 @@ Consider adding it as a composer script
     ...
     "scripts": {
         "fix-risky": [
-            "./vendor/bin/php-cs-fixer fix ./src --config=vendor/christianjbrown/php-cs-fixer-rule-sets/rule-sets/risky.php"
+            "./bin/php-cs-fixer fix ./src --config=vendor/christianjbrown/php-cs-fixer-rule-sets/rule-sets/risky.php"
         ]
     },
     ...
@@ -58,7 +58,7 @@ or simplify with `php-cs-fix`
      ...
     "scripts": {
          "fix": [
-            "./vendor/bin/php-cs-fix ./src"
+            "./bin/php-cs-fix ./src"
         ]
     },
     ...
@@ -75,7 +75,7 @@ Consider the same for `php-cs-fix-diff`
      ...
     "scripts": {
          "fix-diff": [
-            "./vendor/bin/php-cs-fix-diff"
+            "./bin/php-cs-fix-diff"
         ]
     },
     ...
@@ -99,7 +99,7 @@ so that you can just run `composer fix-diff`.
 
 If you want to use `php-cs-fixer` and the wrapper shell scripts `php-cs-fix` and `php-cs-fix-diff`  anywhere 
 
-* Edit your `~/.bash_profile` or `~/.zshrc` and update or set the `PATH` variable to include the `bin` and `vendor/bin` directories within the directory you cloned this repository to. e.g.: `export PATH="[this-directory]/bin:[this-directory]/vendor/bin:$PATH"`. 
+* Edit your `~/.bash_profile` or `~/.zshrc` and update or set the `PATH` variable to include the `bin` and `vendor/bin` directories within the directory you cloned this repository to. e.g.: `export PATH="[this-directory]/bin:$PATH"`.
 * Optionally you may also want to set the following with `export` 
   * `PHP_CS_FIX_CONFIG` - the default rule set for `php-cs-fix`, if you don't set this, it will default to `risky.php`
   * `PHP_CS_FIX_CONFIG_SAFE`   - the default rule set for `php-cs-fix-diff` to run on existing files, if you don't set this, it will currently default to `risky.php` (despite being called "safe")
@@ -127,7 +127,7 @@ where
 #### Example
 
 ```shell
-./vendor/bin/php-cs-fixer fix ./messy-code --config vendor/christianjbrown/php-cs-fixer-rule-sets/risky.php
+./bin/php-cs-fixer fix ./messy-code --config vendor/christianjbrown/php-cs-fixer-rule-sets/risky.php
 ```
 
 
@@ -144,7 +144,7 @@ where
 
 :warning: This will default to the **risky** rule set. See **Setting up global commands** on how to override this.
 
-:bulb: If you don't add this command to your `PATH`, you'll need to run it from the `bin` directory in this repository, or if including this in a composer-enabled PHP project, from the `vendor/bin` directory of your project.
+:bulb: If you don't add this command to your `PATH`, you'll need to run it from the `bin` directory in this repository, or if including this in a composer-enabled PHP project, the configured `bin-dir` (defaults to`vendor/bin`).
 
 
 
@@ -161,7 +161,7 @@ where
 
 :warning: This will currently default to the **risky** rule set for both new and existing files. See **Setting up global commands** on how to override this.
 
-:bulb: If you don't add this command to your `PATH`, you'll need to run it from the `bin` directory in this repository, or if including this in a composer-enabled PHP project, from the `vendor/bin` directory of your project.
+:bulb: If you don't add this command to your `PATH`, you'll need to run it from the `bin` directory in this repository, or if including this in a composer-enabled PHP project, the configured `bin-dir` (defaults to`vendor/bin`).
 
 
 
