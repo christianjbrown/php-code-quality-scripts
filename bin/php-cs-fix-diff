@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ROOT_DIR=$(dirname "$BASH_SOURCE")/..
+ROOT_DIR=$(dirname "${BASH_SOURCE[0]}")/..
 PHP_CS_FIXER=$ROOT_DIR/vendor/bin/php-cs-fixer
 
 SINCE_COMMIT=${1:-HEAD}
@@ -13,14 +13,14 @@ if [ -z "$PHP_CS_FIX_CONFIG_RISKY" ]; then
   PHP_CS_FIX_CONFIG_RISKY=$ROOT_DIR/rule-sets/risky.php
 fi
 
-pushd `git rev-parse --show-toplevel`
+pushd "$(git rev-parse --show-toplevel)" || exit
 
 # Existing files
-for file in `git diff --name-only --diff-filter=MR $SINCE_COMMIT`; do
+for file in $(git diff --name-only --diff-filter=MR "$SINCE_COMMIT"); do
 	# git diff allow us to use --diff-filter and a commit, where as git status and git ls-files does not
 	if [[ $file == *\.php ]]; then
-		if php -l $file; then
-			$PHP_CS_FIXER fix $file -vvv --config=$PHP_CS_FIX_CONFIG_SAFE
+		if php -l "$file"; then
+			$PHP_CS_FIXER fix "$file" --config="$PHP_CS_FIX_CONFIG_SAFE"
 		else
 			echo "\033[0;31mLinting fail in $file\033[0m"
 			exit
@@ -29,11 +29,11 @@ for file in `git diff --name-only --diff-filter=MR $SINCE_COMMIT`; do
 done
 
 # New files (can be riskier rules)
-for file in `git diff --name-only --diff-filter=ACX $SINCE_COMMIT`; do
+for file in $(git diff --name-only --diff-filter=ACX "$SINCE_COMMIT"); do
 	# git diff allow us to use --diff-filter and a commit, where as git status and git ls-files does not
 	if [[ $file == *\.php ]]; then
-		if php -l $file; then
-			$PHP_CS_FIXER fix $file -vvv --config=$PHP_CS_FIX_CONFIG_RISKY
+		if php -l "$file"; then
+			$PHP_CS_FIXER fix "$file" --config="$PHP_CS_FIX_CONFIG_RISKY"
 		else
 			echo "\033[0;31mLinting fail in $file\033[0m"
 			exit 1
@@ -42,10 +42,10 @@ for file in `git diff --name-only --diff-filter=ACX $SINCE_COMMIT`; do
 done
 
 # Untracked files (can be riskier rules)
-for file in `git ls-files -o`; do
+for file in $(git ls-files -o); do
 	if [[ $file == *\.php ]]; then
-		if php -l $file; then
-			$PHP_CS_FIXER fix $file -vvv --config=$PHP_CS_FIX_CONFIG_RISKY
+		if php -l "$file"; then
+			$PHP_CS_FIXER fix "$file" --config="$PHP_CS_FIX_CONFIG_RISKY"
 		else
 			echo "\033[0;31mLinting fail in $file\033[0m"
 			exit 1
@@ -53,4 +53,4 @@ for file in `git ls-files -o`; do
 	fi
 done
 
-popd
+popd || exit
