@@ -1,6 +1,6 @@
 {
     "name": "christianjbrown/php-cs-fixer-wrapper",
-    "type": "library",
+    "type": "project",
     "require": {
         "php": "~8.2",
         "ext-mbstring": "*",
