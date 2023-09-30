@@ -1,24 +1,34 @@
-# :wrench: PHP Coding Standards Fixer Rule Sets 
+# :wrench: PHP Coding Standards Fixer Wrapper
 
-PHP code can be ..messy, luckily, there's lots of tools to fix code automagically, including `php-cs-fixer` by `friendsofphp`.
+PHP code can be ..messy, luckily, there's lots of tools to fix code automagically, including [PHP CS Fixer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer). That tool allows you to define rule sets of your own, building on top of existing rule sets and rules.
 
-That tool allows you to define rule sets of your own, building on top of existing rule sets and rules. This repository holds some common `php-cs-fixer` rule sets I prefer to use. They're in their own repository, so that I can pull them in to multiple projects via composer.
+**This repository / project provides:**
 
-There are also two wrapper scripts:
+1) Some common PHP CS Fixer **rule sets **I prefer to use. 
 
-* `php-cs-fix` is a very simple wrapper around PHP-CS-Fixer's own binary, to simplify the command line and load the right config. If a directory is provided, it will process the entire directory, ignoring any Git status.
+2. Two helpful **wrapper scripts**:
 
-* `php-cs-fix-diff` runs PHP-CS-Fixer on files changed according to Git. It will loop through
+   `php-cs-fix` is a very simple wrapper around PHP-CS-Fixer's own binary, to simplify the command line and load the right config.
+
+   `php-cs-fix-diff` runs PHP CS Fixer on files changed according to Git. It will fix:
+
    - all modified (`M`) and renamed (`R`) files, and runs the non-risky rule sets
    - all added (`A`), copied (`C`) files or untracked files (`?`), and runs the risky rule sets
 
+   
+
 ## :heavy_check_mark: Prerequisites
 
-- Bash/Z-Shell
-- Git
-- PHP 8.2
-- Composer
-  
+- Bash/Z-Shell*
+- [Git](https://git-scm.com/)
+- [PHP](https://www.php.net/) 8.2
+- [Composer](https://getcomposer.org/)
+
+:bulb: If you're on macOS and have [HomeBrew](https://brew.sh/), PHP and Composer will install with `brew install composer`. If you run `php -v` and there are errors, you may also need to `brew install gd`
+
+\* These scripts have only been tested on macOS, but will likely work in any Bash/Z-Shell environment.
+
+
 
 ## :building_construction: Installation
 
@@ -51,7 +61,9 @@ Consider adding it as a composer script
 
 ```
 
-or simplify with `php-cs-fix`
+using a rule set to suit you.
+
+Alternatively, simplify with `php-cs-fix`
 
 ```json
 {
@@ -66,7 +78,7 @@ or simplify with `php-cs-fix`
 
 ```
 
-so that you can just run `composer fix`.
+either way, so that you can just run `composer fix`.
 
 Consider the same for `php-cs-fix-diff`
 
@@ -88,6 +100,8 @@ so that you can just run `composer fix-diff`.
 
 
 ### Standalone installation
+
+If you want to use these tools in a standalone way, not specific to a project:
 
 * `git clone` his repository to a directory of choice on your local machine.
 * change to the install directory and run `composer update`
@@ -114,7 +128,7 @@ If you want to use `php-cs-fixer` and the wrapper shell scripts `php-cs-fix` and
 
 ### Using `php-cs-fixer` directly
 
-See `php-cs-fixer`'s own documentation, but to use these rule sets when fixing files, it's:
+See [PHP CS Fixer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer)'s own documentation, but to use these rule sets when fixing files, it's:
 
 ```shell
 php-cs-fixer fix [files] --config vendor/christianjbrown/php-cs-fixer-rule-sets/[rule-set].php
@@ -183,7 +197,7 @@ A set of risky non-backward compatible rules based on various PSR, Symfony, Doct
 
 Rule set: `safe.php`
 
-This is currently removed, as I only use PHP personally, and not in a company environment where I'd have to be more careful. Saves me maintaining something I no longer need.
+:x:  This is **currently removed**, as I only use PHP personally, and not in a company environment where I'd have to be more careful. Saves me maintaining something I no longer need.
 
 
 
