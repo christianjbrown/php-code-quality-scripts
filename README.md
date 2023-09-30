@@ -4,7 +4,7 @@ PHP code can be ..messy, luckily, there's lots of tools to fix code automagicall
 
 **This repository / project provides:**
 
-1) Some common PHP CS Fixer **rule sets **I prefer to use. 
+1. Some common PHP CS Fixer **rule sets **I prefer to use. 
 
 2. Two helpful **wrapper scripts**:
 
