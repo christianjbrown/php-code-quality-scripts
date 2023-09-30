@@ -1,5 +1,5 @@
 #!/bin/bash
-ROOT_DIR=$(dirname "$BASH_SOURCE")/..
+ROOT_DIR=$(dirname "${BASH_SOURCE[0]}")/..
 PHP_CS_FIXER=$ROOT_DIR/vendor/bin/php-cs-fixer
 
 FILES=${1:-$(pwd)}
@@ -9,4 +9,4 @@ if [ -z "$PHP_CS_FIX_CONFIG" ]; then
 fi
 
 echo "Running php-cs-fixer on $FILES with config from $PHP_CS_FIX_CONFIG ..."
-$PHP_CS_FIXER fix $FILES -vvv --config=$PHP_CS_FIX_CONFIG
+$PHP_CS_FIXER fix "$FILES" -vvv --config="$PHP_CS_FIX_CONFIG"
