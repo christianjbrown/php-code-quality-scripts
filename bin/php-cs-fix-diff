@@ -6,13 +6,14 @@ PHP_CS_FIXER="$THIS_DIR/php-cs-fixer"
 
 SINCE_COMMIT=${1:-HEAD}
 
-if [ -z "$PHP_CS_FIX_CONFIG_SAFE" ]; then
-  # For now, we use the same config for safe and risky, see README.md
-  PHP_CS_FIX_CONFIG_SAFE=$ROOT_DIR/rule-sets/risky.php
-fi
 if [ -z "$PHP_CS_FIX_CONFIG_RISKY" ]; then
   PHP_CS_FIX_CONFIG_RISKY=$ROOT_DIR/rule-sets/risky.php
 fi
+if [ -z "$PHP_CS_FIX_CONFIG_SAFE" ]; then
+  # For now, we use the same config for safe and risky, see README.md
+  PHP_CS_FIX_CONFIG_SAFE=$PHP_CS_FIX_CONFIG_RISKY
+fi
+
 
 function fix() {
 	if [[ $1 == *\.php ]]; then
