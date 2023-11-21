@@ -201,7 +201,7 @@ $rules = [
     'octal_notation' => true,
     'operator_linebreak' => true,
     'ordered_class_elements' => ['sort_algorithm' => 'alpha', 'order' => ['use_trait', 'case', 'constant_public', 'constant_protected', 'constant_private', 'property_public', 'property_protected', 'property_private', 'construct', 'destruct', 'magic', 'phpunit', 'method_public', 'method_protected', 'method_private']],
-    'ordered_imports' => true,
+    'ordered_imports' => ['imports_order' => ['class', 'function', 'const'], 'sort_algorithm' => 'alpha'],
     'ordered_interfaces' => true,
     'ordered_traits' => true,
     'ordered_types' => true,
