@@ -66,7 +66,7 @@ $rules = [
     'blank_lines_before_namespace' => false, // see single_blank_line_before_namespace
     'braces_position' => ['allow_single_line_anonymous_functions' => true, 'allow_single_line_empty_anonymous_classes' => true, 'anonymous_classes_opening_brace' => 'next_line_unless_newline_at_signature_end', 'anonymous_functions_opening_brace' => 'same_line', 'classes_opening_brace' => 'next_line_unless_newline_at_signature_end', 'control_structures_opening_brace' => 'same_line', 'functions_opening_brace' => 'next_line_unless_newline_at_signature_end'],
     'cast_spaces' => true,
-    'class_attributes_separation' => ['elements' => ['const' => 'only_if_meta', 'method' => 'only_if_meta', 'property' => 'only_if_meta', 'trait_import' => 'only_if_meta', 'case' => 'only_if_meta']],
+    'class_attributes_separation' => ['elements' => ['const' => 'only_if_meta', 'method' => 'one', 'property' => 'only_if_meta', 'trait_import' => 'only_if_meta', 'case' => 'only_if_meta']],
     'class_definition' => true,
     'class_reference_name_casing' => true,
     'clean_namespace' => true,
