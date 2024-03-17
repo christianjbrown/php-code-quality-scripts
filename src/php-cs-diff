@@ -1,0 +1,37 @@
+#!/bin/bash
+
+THIS_DIR=$(dirname "${BASH_SOURCE[0]}")
+ROOT_DIR="$THIS_DIR/.."
+PHP_CS="$ROOT_DIR/bin/phpcs"
+
+SINCE_COMMIT=${1:-HEAD}
+
+if [ -z "$PHP_CS_STANDARD" ]; then
+  PHP_CS_STANDARD="$ROOT_DIR/standards/ChristianBrown/ruleset.xml"
+fi
+
+function check() {
+	if [[ $1 == *\.php ]]; then
+		if php -l "$1" > /dev/null; then
+		  echo "Checking $1"
+			$PHP_CS --standard="$PHP_CS_STANDARD" "$1"
+		else
+			echo "\033[0;31mLinting fail in $1\033[0m"
+			exit 1
+		fi
+	fi
+}
+
+pushd "$(git rev-parse --show-toplevel)" > /dev/null|| exit
+
+# New and Existing files
+for file in $(git diff --name-only --diff-filter=MRACX "$SINCE_COMMIT"); do
+  check "$file";
+done
+
+# Untracked files
+for file in $(git ls-files --others --exclude-standard); do
+  check "$file";
+done
+
+popd > /dev/null || exit

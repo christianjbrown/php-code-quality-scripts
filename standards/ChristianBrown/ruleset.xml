@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<ruleset name="ChristianBrown">
+
+    <arg name="tab-width" value="4" />
+    <arg value="p" />
+    <arg value="s" />
+    <arg name="colors" />
+
+    <!-- Symfony rules, minus some -->
+
+    <rule ref="vendor/escapestudios/symfony2-coding-standard/Symfony">
+        <exclude name="PEAR.Commenting.FunctionComment.Missing" />
+        <exclude name="PEAR.Commenting.ClassComment.Missing" />
+        <exclude name="Symfony.Commenting.ClassComment.Missing" />
+        <exclude name="Symfony.Commenting.FunctionComment.Missing" />
+        <exclude name="Symfony.Commenting.FunctionComment.MissingParamTag" />
+        <exclude name="Symfony.Commenting.FunctionComment.MissingReturn" />
+        <exclude name="Symfony.Commenting.License" />
+        <exclude name="Zend.NamingConventions.ValidVariableName.MemberVarContainsNumbers" />
+    </rule>
+
+    <!-- Additional rules, checking code style -->
+
+    <rule ref="Generic.Arrays.DisallowLongArraySyntax" />
+    <rule ref="Generic.CodeAnalysis.AssignmentInCondition" />
+    <rule ref="Generic.CodeAnalysis.EmptyPHPStatement" />
+    <rule ref="Generic.CodeAnalysis.JumbledIncrementer" />
+    <rule ref="Generic.CodeAnalysis.UnconditionalIfStatement" />
+    <rule ref="Generic.CodeAnalysis.UnnecessaryFinalModifier" />
+    <rule ref="Generic.CodeAnalysis.UselessOverridingMethod" />
+    <rule ref="Generic.Commenting.DocComment">
+        <exclude name="Generic.Commenting.DocComment.MissingShort" />
+        <exclude name="Generic.Commenting.DocComment.ShortNotCapital" />
+        <exclude name="Generic.Commenting.DocComment.TagValueIndent" />
+    </rule>
+    <rule ref="Generic.ControlStructures.InlineControlStructure" />
+    <rule ref="Generic.Files.LineLength">
+        <exclude name="Generic.Files.LineLength.TooLong"/>
+    </rule>
+    <rule ref="Generic.Files.OneInterfacePerFile" />
+    <rule ref="Generic.Files.OneObjectStructurePerFile" />
+    <rule ref="Generic.Files.OneTraitPerFile" />
+    <rule ref="Generic.NamingConventions.ConstructorName" />
+    <rule ref="Generic.PHP.CharacterBeforePHPOpeningTag" />
+    <rule ref="Generic.PHP.DeprecatedFunctions" />
+    <rule ref="Generic.PHP.ForbiddenFunctions" />
+    <rule ref="Generic.PHP.Syntax" />
+    <rule ref="Generic.Strings.UnnecessaryStringConcat">
+        <properties>
+            <property name="allowMultiline" value="true" />
+        </properties>
+    </rule>
+    <rule ref="Generic.VersionControl.GitMergeConflict" />
+    <rule ref="Generic.WhiteSpace.IncrementDecrementSpacing" />
+    <rule ref="Generic.WhiteSpace.LanguageConstructSpacing" />
+    <rule ref="Generic.WhiteSpace.ScopeIndent">
+        <properties>
+            <property name="exact" value="true" />
+            <property name="ignoreIndentationTokens" type="array" value="T_COMMENT,T_DOC_COMMENT_OPEN_TAG" />
+        </properties>
+    </rule>
+    <rule ref="MySource.PHP.GetRequestData" />
+    <rule ref="PEAR.Commenting.ClassComment">
+        <!-- We do not use these class tags -->
+        <exclude name="PEAR.Commenting.ClassComment.MissingCategoryTag" />
+        <exclude name="PEAR.Commenting.ClassComment.MissingPackageTag" />
+        <exclude name="PEAR.Commenting.ClassComment.MissingAuthorTag" />
+        <exclude name="PEAR.Commenting.ClassComment.MissingLicenseTag" />
+        <exclude name="PEAR.Commenting.ClassComment.MissingLinkTag" />
+    </rule>
+    <rule ref="PEAR.Commenting.FunctionComment">
+        <!-- We do not require param comments -->
+        <exclude name="PEAR.Commenting.FunctionComment.MissingParamComment" />
+
+        <exclude name="PEAR.Commenting.FunctionComment.MissingReturn" />
+        <exclude name="PEAR.Commenting.FunctionComment.MissingParamTag" />
+
+        <!-- Duplicate functionality of Symfony.Commenting.FunctionComment.MissingParamName -->
+        <exclude name="PEAR.Commenting.FunctionComment.MissingParamName" />
+        <exclude name="PEAR.Commenting.FunctionComment.SpacingAfterParamType" />
+        <exclude name="PEAR.Commenting.FunctionComment.ExtraParamComment" />
+
+    </rule>
+    <rule ref="PEAR.Commenting.InlineComment" />
+    <rule ref="PEAR.ControlStructures.ControlSignature" />
+    <rule ref="PEAR.ControlStructures.MultiLineCondition" />
+    <rule ref="PEAR.Files.IncludingFile" />
+    <rule ref="PEAR.Functions.FunctionDeclaration" />
+    <rule ref="PEAR.NamingConventions.ValidFunctionName">
+        <exclude name="PEAR.NamingConventions.ValidFunctionName.PrivateNoUnderscore" />
+    </rule>
+    <rule ref="PSR1" />
+    <rule ref="PSR2" />
+
+    <!--
+        Rules we abide by but currently not available as sniffers -
+
+            - remove unused use statements (drupal has a sniff, but reports false positives)
+            - ordered import/use statements
+            - classes other than entities, exceptions, and abstract should be final
+            - phpdoc - full stop at end of summary (if any)
+            - phpdoc - full stop at end of description (if any)
+            - phpdoc on const's with @var
+    -->
+
+    <!-- Additional rules, checking architecture -->
+
+    <rule ref="Generic.Metrics.CyclomaticComplexity">
+        <properties>
+            <property name="complexity" value="8" />
+            <property name="absoluteComplexity" value="10" />
+        </properties>
+    </rule>
+    <rule ref="Generic.Metrics.NestingLevel">
+        <properties>
+            <property name="nestingLevel" value="5" />
+            <property name="absoluteNestingLevel" value="10" />
+        </properties>
+    </rule>
+</ruleset>

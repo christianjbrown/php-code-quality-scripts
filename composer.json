@@ -4,11 +4,25 @@
     "require": {
         "php": "~8.2",
         "ext-mbstring": "*",
-        "friendsofphp/php-cs-fixer": "dev-master"
+        "escapestudios/symfony2-coding-standard": "dev-master",
+        "friendsofphp/php-cs-fixer": "dev-master",
+        "squizlabs/php_codesniffer": "dev-master"
     },
     "bin": [
+        "src/php-cs",
+        "src/php-cs-diff",
         "src/php-cs-fix",
         "src/php-cs-fix-diff"
+    ],
+    "setup-standards": [
+        "./bin/phpcs --config-set installed_paths `pwd`/standards > /dev/null",
+        "./bin/phpcs --config-set default_standard `pwd`/standards/ChristianBrown > /dev/null"
+    ],
+    "post-install-cmd": [
+        "@setup-standards"
+    ],
+    "post-update-cmd": [
+        "@setup-standards"
     ],
     "config": {
         "bin-dir": "bin"
