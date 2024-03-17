@@ -8,12 +8,12 @@
     },
     "scripts": {
         "fix": [
-            "bin/php-cs-fix ./rule-sets"
+            "src/php-cs-fix ./rule-sets"
         ]
     },
     "bin": [
-        "bin/php-cs-fix",
-        "bin/php-cs-fix-diff"
+        "src/php-cs-fix",
+        "src/php-cs-fix-diff"
     ],
     "config": {
         "bin-dir": "bin"
