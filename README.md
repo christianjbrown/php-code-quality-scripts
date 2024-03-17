@@ -1,21 +1,23 @@
-# :wrench: PHP Coding Standards Fixer Wrapper
+# :wrench: PHP Code Quality Scripts
 
-PHP code can be ..messy, luckily, there's lots of tools to fix code automagically, including [PHP CS Fixer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer). That tool allows you to define rule sets of your own, building on top of existing rule sets and rules.
+PHP code can be ..messy, luckily, there's lots of tools to fix code automagically, including [PHP Code Sniffer](https://github.com/squizlabs/PHP_CodeSniffer) and [PHP CS Fixer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer). 
 
-**This repository / project provides:**
+This project
 
-1. Some common **PHP CS Fixer rule sets** I prefer to use. 
+* Installs PHP Code Sniffer and PHP CS Fixer
+* A **PHP Code Sniffer standard** I prefer to use, building upon existing standards.
 
-2. Two helpful **wrapper scripts**:
+* A set of **PHP CS Fixer rules** I prefer to use to clean up code. 
 
-   `php-cs-fix` is a very simple wrapper around PHP-CS-Fixer's own binary, to simplify the command line and load the right config.
+* Wrapper shell scripts
 
-   `php-cs-fix-diff` runs PHP CS Fixer on files changed according to Git. It will fix:
+​		`php-cs` is a very simple wrapper around PHP Code Sniffer's own binary, to simplify the command 		line and load the right standard.
 
-   - all modified (`M`) and renamed (`R`) files, and runs the non-risky rule sets
-   - all added (`A`), copied (`C`) files or untracked files (`?`), and runs the risky rule sets
+​		`php-cs-diff` runs PHP Code Sniffer on files changed according to Git.
 
-   
+​		`php-cs-fix` is a very simple wrapper around PHP-CS-Fixer's own binary, to simplify the command 		line and load the right ruleset.
+
+​		`php-cs-fix-diff` runs PHP CS Fixer on files changed according to Git. It runs risker rules on new 		files vs existing.
 
 ## :heavy_check_mark: Prerequisites
 
