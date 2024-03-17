@@ -2,7 +2,7 @@
 
 THIS_DIR=$(dirname "${BASH_SOURCE[0]}")
 ROOT_DIR="$THIS_DIR/.."
-PHP_CS_FIXER="$THIS_DIR/php-cs-fixer"
+PHP_CS_FIXER="$ROOT_DIR/bin/php-cs-fixer"
 
 SINCE_COMMIT=${1:-HEAD}
 
