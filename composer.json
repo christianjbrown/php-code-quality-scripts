@@ -6,11 +6,6 @@
         "ext-mbstring": "*",
         "friendsofphp/php-cs-fixer": "dev-master"
     },
-    "scripts": {
-        "fix": [
-            "src/php-cs-fix ./rule-sets"
-        ]
-    },
     "bin": [
         "src/php-cs-fix",
         "src/php-cs-fix-diff"
