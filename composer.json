@@ -1,5 +1,5 @@
 {
-    "name": "christianjbrown/php-cs-fixer-wrapper",
+    "name": "christianjbrown/php-code-quality-scripts",
     "type": "project",
     "require": {
         "php": "~8.2",
