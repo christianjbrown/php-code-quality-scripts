@@ -6,10 +6,10 @@ This project
 * A **PHP Code Sniffer standard** I prefer to use, building upon existing PSR, Symfony, Doctrine and PER standards.
 * A set of **PHP CS Fixer rule sets** I prefer to use to clean up code to meet PSR, Symfony, Doctrine and PER standards. One riskier set for new files, and a safer set for existing files. 
 * Wrapper shell scripts
-  * `./bin/php-cs` is a very simple wrapper around PHP Code Sniffer's own binary, to simplify the command line and load the right standard.
-  * `./bin/php-cs-diff` runs PHP Code Sniffer only on files changed according to Git.
-  * `./bin/php-cs-fix` is a very simple wrapper around PHP-CS-Fixer's own binary, to simplify the command line and load the right ruleset.
-  * `./bin/php-cs-fix-diff` runs PHP CS Fixer only on files changed according to Git. It runs more risky rules on new files vs existing.
+  * `./src/php-cs` is a very simple wrapper around PHP Code Sniffer's own binary, to simplify the command line and load the right standard.
+  * `./src/php-cs-diff` runs PHP Code Sniffer only on files changed according to Git.
+  * `./src/php-cs-fix` is a very simple wrapper around PHP-CS-Fixer's own binary, to simplify the command line and load the right ruleset.
+  * `./src/php-cs-fix-diff` runs PHP CS Fixer only on files changed according to Git. It runs more risky rules on new files vs existing.
 
 ## :heavy_check_mark: Prerequisites
 
@@ -65,10 +65,10 @@ Alternatively, you can use the original PHP Code Sniffer `phpcs` and PHP CS Fixe
 {
     "scripts": {
         "check-style": [
-            "clear && ./bin/phpcs --standard=vendor/christianjbrown/php-code-quality-scripts/standards/ChristianBrown/ruleset.xml ./src ./tests"
+            "clear && ./bin/phpcs --standard=vendor/christianjbrown/php-code-quality-scripts/config/standard.xml ./src ./tests"
         ],
          "fix-style": [
-            "clear && ./bin/php-cs-fixer fix ./src ./tests -vvv --config=vendor/christianjbrown/php-code-quality-scripts/rule-sets/risky.php"
+            "clear && ./bin/php-cs-fixer fix --config=vendor/christianjbrown/php-code-quality-scripts/config/fix-risky.php ./src ./tests"
         ]
     }
 }
@@ -93,12 +93,12 @@ If you want to use these tools in a standalone way, not specific to a project:
 
 If you want to use the shell scripts anywhere
 
-* Edit your `~/.bash_profile` or `~/.zshrc` and update or set the `PATH` variable to include the `./bin` directories within the directory you cloned this repository to. e.g.: `export PATH="[this-directory]/bin:$PATH"`.
+* Edit your `~/.bash_profile` or `~/.zshrc` and update or set the `PATH` variable to include the `./src` directory within the directory you cloned this repository to. e.g.: `export PATH="[this-directory]/src:$PATH"`.
 * Optionally you may also want to set the following with `export`
-  * `PHP_CS_STANDARD` - the default standard for `php-cs`, if you don't set this, it will default to `./standards/ChristianBrown`
-  * `PHP_CS_FIX_CONFIG` - the default rule set for `php-cs-fix`, if you don't set this, it will default to `./rule-sets/risky.php`
-  * `PHP_CS_FIX_CONFIG_SAFE` - the default rule set for `php-cs-fix-diff` to run on existing files, if you don't set this, it will currently default to `./rule-sets/safe.php`
-  * `PHP_CS_FIX_CONFIG_RISKY` - the default rule set for `php-cs-fix-diff` to run on new and untracked files, if you don't set this, it will default to `./rule-sets/risky.php`
+  * `PHP_CS_STANDARD` - the default standard for `php-cs`, if you don't set this, it will default to `./config/standard.xml`
+  * `PHP_CS_FIX_CONFIG` - the default rule set for `php-cs-fix`, if you don't set this, it will default to `./config/fix-risky.php`
+  * `PHP_CS_FIX_CONFIG_SAFE` - the default rule set for `php-cs-fix-diff` to run on existing files, if you don't set this, it will currently default to `./config/fix-safe.php`
+  * `PHP_CS_FIX_CONFIG_RISKY` - the default rule set for `php-cs-fix-diff` to run on new and untracked files, if you don't set this, it will default to `./config/fix-risky.php`
 * Run `source ~/.bash_profile` or `source ~/.zshrc` to reload it.
 
 
@@ -172,44 +172,44 @@ where
 If you prefer to use the original `php-cs-fixer` command instead of the provided wrapper scripts, see [PHP CS Fixer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer)'s own documentation, but to use these rule sets when fixing files, it's:
 
 ```shell
-php-cs-fixer fix [files] --config vendor/christianjbrown/php-code-quality-scripts/[rule-set].php
+php-cs-fixer fix [files] --config vendor/christianjbrown/php-code-quality-scripts/config/[rule-set].php
 ```
 
 where
 * `files` is a list of files or directories to fix.
-* `rule-set` is the name of the rule set to use available in the `vendor/christianjbrown/php-cs-fixer-rule-sets` directory.
+* `rule-set` is the name or location of the rule set to use.
 
 #### Example
 
 ```shell
-./bin/php-cs-fixer fix ./messy-code --config vendor/christianjbrown/php-code-quality-scripts/risky.php
+./bin/php-cs-fixer fix ./messy-code --config vendor/christianjbrown/php-code-quality-scripts/config/fix-risky.php
 ```
 
 
 
 ## PHP CodeSniffer Standard
 
-The PHPCS standards can be found in `./standards` directory.
+The PHPCS standards can be found in `./config` directory.
 
-The only standard in there right now is `./standards/ChristianBrown` which is a set of rules based on various PSR, Symfony, Doctrine and PER standards, with a few more sprinkled in for extra goodness.
+The only standard in there right now is `./config/standard.xml` which is a set of rules based on various PSR, Symfony, Doctrine and PER standards, with a few more sprinkled in for extra goodness.
 
 
 
 ## PHP CS Fixer Rule sets
 
-The rule sets can be found in the `./rule-sets` directory.
+The rule sets can be found in the `./config` directory.
 
 They can be generated by a handy user interface provided at https://mlocati.github.io/php-cs-fixer-configurator/
 
 ### :warning: Risky
 
-Rule set: `risky.php`
+Rule set: `fix-risky.php`
 
 A set of risky non-backward compatible rules based on various PSR, Symfony, Doctrine and PER standards, with a few more sprinkled in for extra goodness. If you use this, you will want to have very good test coverage, but at the end you will have some very neat code.
 
 ### :construction_worker: Safe
 
-Rule set: `safe.php`
+Rule set: `fix-safe.php`
 
 A set of safer backward-compatible rules based on various PSR, Symfony, Doctrine and PER standards, with a few more sprinkled in for extra goodness. This is better for running on existing legacy codebases which you may to be too risky to make too many changes to in one go.
 

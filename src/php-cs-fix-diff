@@ -7,12 +7,32 @@ PHP_CS_FIXER="$ROOT_DIR/bin/php-cs-fixer"
 SINCE_COMMIT=${1:-HEAD}
 
 if [ -z "$PHP_CS_FIX_CONFIG_RISKY" ]; then
-  PHP_CS_FIX_CONFIG_RISKY=$ROOT_DIR/rule-sets/risky.php
-fi
-if [ -z "$PHP_CS_FIX_CONFIG_SAFE" ]; then
-  PHP_CS_FIX_CONFIG_SAFE=$ROOT_DIR/rule-sets/safe.php
+  if test -f "$ROOT_DIR/config/risky.php"; then
+      PHP_CS_FIX_CONFIG_RISKY="$ROOT_DIR/config/risky.php"
+  elif test -f "$ROOT_DIR/vendor/christianjbrown/php-code-quality-scripts/config/risky.php"; then
+      PHP_CS_FIX_CONFIG_RISKY="$ROOT_DIR/vendor/christianjbrown/php-code-quality-scripts/config/risky.php"
+  else
+      echo "No PHP CS Fixer risky rules file set, and defaults not found in normal location." 1>&2
+      exit 1
+  fi
+elif ! test -f "$PHP_CS_FIX_CONFIG_RISKY"; then
+  echo "PHP CS Fixer risky rules file $PHP_CS_FIX_CONFIG_RISKY not found." 1>&2
+  exit 1
 fi
 
+if [ -z "$PHP_CS_FIX_CONFIG_SAFE" ]; then
+  if test -f "$ROOT_DIR/config/safe.php"; then
+      PHP_CS_FIX_CONFIG_SAFE="$ROOT_DIR/config/safe.php"
+  elif test -f "$ROOT_DIR/vendor/christianjbrown/php-code-quality-scripts/config/safe.php"; then
+      PHP_CS_FIX_CONFIG_SAFE="$ROOT_DIR/vendor/christianjbrown/php-code-quality-scripts/config/safe.php"
+  else
+      echo "No PHP CS Fixer SAFE rules file set, and defaults not found in normal location." 1>&2
+      exit 1
+  fi
+elif ! test -f "$PHP_CS_FIX_CONFIG_SAFE"; then
+  echo "PHP CS Fixer SAFE rules file $PHP_CS_FIX_CONFIG_SAFE not found." 1>&2
+  exit 1
+fi
 
 function fix() {
 	if [[ $1 == *\.php ]]; then

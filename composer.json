@@ -14,16 +14,18 @@
         "src/php-cs-fix",
         "src/php-cs-fix-diff"
     ],
-    "setup-standards": [
-        "./bin/phpcs --config-set installed_paths `pwd`/standards > /dev/null",
-        "./bin/phpcs --config-set default_standard `pwd`/standards/ChristianBrown > /dev/null"
-    ],
-    "post-install-cmd": [
-        "@setup-standards"
-    ],
-    "post-update-cmd": [
-        "@setup-standards"
-    ],
+    "scripts": {
+        "setup-standards": [
+            "./bin/phpcs --config-set installed_paths `pwd`/config > /dev/null",
+            "./bin/phpcs --config-set default_standard `pwd`/config/ChristianBrown.xml > /dev/null"
+        ],
+        "post-install-cmd": [
+            "@setup-standards"
+        ],
+        "post-update-cmd": [
+            "@setup-standards"
+        ]
+    },
     "config": {
         "bin-dir": "bin"
     }
