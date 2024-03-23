@@ -4,10 +4,10 @@ THIS_DIR=$(dirname "${BASH_SOURCE[0]}")
 ROOT_DIR="$THIS_DIR/.."
 
 if [ -z "$PHP_CS" ]; then
-  if test -f "$ROOT_DIR/bin/phpcs"; then
+  if test -f "$ROOT_DIR/../../../bin/phpcs"; then
+      PHP_CS="$ROOT_DIR/../../../bin/phpcs"
+  elif test -f "$ROOT_DIR/bin/phpcs"; then
       PHP_CS="$ROOT_DIR/bin/phpcs"
-  elif test -f "$THIS_DIR/phpcs"; then
-      PHP_CS="$THIS_DIR/phpcs"
   else
       echo "No PHP CodeSniffer executable set, and defaults not found in normal location." 1>&2
       exit 1
