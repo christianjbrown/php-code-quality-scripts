@@ -11,6 +11,8 @@ This project
   * `./src/php-cs-fix` is a very simple wrapper around PHP-CS-Fixer's own binary, to simplify the command line and load the right ruleset.
   * `./src/php-cs-fix-diff` runs PHP CS Fixer only on files changed according to Git. It runs more risky rules on new files vs existing.
 
+
+
 ## :heavy_check_mark: Prerequisites
 
 - Bash/Z-Shell*
@@ -23,7 +25,9 @@ This project
 \* These scripts have only been tested on MacOS, but will likely work in any Bash/Z-Shell environment.
 
 
+
 ## :building_construction: Installation
+
 
 
 ### As part of your composer-enabled project
@@ -33,6 +37,7 @@ In the project you wish to use the phpcs standard and phpcsfixer rules in your p
 ```shell
 composer require --dev christianjbrown/php-code-quality-scripts
 ```
+
 
 
 #### Adding a composer script
