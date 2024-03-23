@@ -22,8 +22,6 @@ SINCE_COMMIT=${1:-HEAD}
 if [ -z "$PHP_CS_STANDARD" ]; then
   if test -f "$ROOT_DIR/config/standard.xml"; then
       PHP_CS_STANDARD="$ROOT_DIR/config/standard.xml"
-  elif test -f "$ROOT_DIR/vendor/christianjbrown/php-code-quality-scripts/config/standard.xml"; then
-      PHP_CS_STANDARD="$ROOT_DIR/vendor/christianjbrown/php-code-quality-scripts/config/standard.xml"
   else
       echo "No PHP CodeSniffer standard set, and defaults not found in normal location." 1>&2
       exit 1

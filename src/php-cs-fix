@@ -6,7 +6,7 @@ PHP_CS_FIXER="$ROOT_DIR/bin/php-cs-fixer"
 
 if [ -z "$PHP_CS_FIXER" ]; then
   if test -f "$ROOT_DIR/../../../bin/php-cs-fixer"; then
-        PHP_CS_FIXER="$ROOT_DIR/../../../bin/php-cs-fixer"
+      PHP_CS_FIXER="$ROOT_DIR/../../../bin/php-cs-fixer"
   elif test -f "$ROOT_DIR/bin/php-cs-fixer"; then
       PHP_CS_FIXER="$ROOT_DIR/bin/php-cs-fixer"
   else
@@ -24,8 +24,6 @@ FILES=${1:-$(pwd)}
 if [ -z "$PHP_CS_FIX_CONFIG" ]; then
   if test -f "$ROOT_DIR/config/fix-risky.php"; then
       PHP_CS_FIX_CONFIG="$ROOT_DIR/config/fix-risky.php"
-  elif test -f "$ROOT_DIR/vendor/christianjbrown/php-code-quality-scripts/config/fix-risky.php"; then
-      PHP_CS_FIX_CONFIG="$ROOT_DIR/vendor/christianjbrown/php-code-quality-scripts/config/fix-risky.php"
   else
       echo "No PHP CS Fixer rules file set, and defaults not found in normal location." 1>&2
       exit 1
