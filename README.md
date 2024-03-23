@@ -20,7 +20,7 @@ This project
 - [PHP](https://www.php.net/) 8.2 or higher (8.x)
 - [Composer](https://getcomposer.org/)
 
-:bulb: If you're on macOS and have [HomeBrew](https://brew.sh/), PHP and Composer will install with `brew install composer`. 
+:bulb: If you're on macOS and have [Homebrew](https://brew.sh/), PHP and Composer will install with `brew install composer`. 
 
 \* These scripts have only been tested on MacOS, but will likely work in any Bash/Z-Shell environment.
 
