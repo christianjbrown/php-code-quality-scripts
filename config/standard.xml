@@ -8,7 +8,7 @@
 
     <!-- Symfony rules, minus some -->
 
-    <rule ref="../vendor/escapestudios/symfony2-coding-standard/Symfony">
+    <rule ref="vendor/escapestudios/symfony2-coding-standard/Symfony">
         <exclude name="PEAR.Commenting.FunctionComment.Missing" />
         <exclude name="PEAR.Commenting.ClassComment.Missing" />
         <exclude name="Symfony.Commenting.ClassComment.Missing" />
