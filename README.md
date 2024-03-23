@@ -40,7 +40,7 @@ composer require --dev christianjbrown/php-code-quality-scripts
 
 
 
-#### Adding a composer script
+#### Adding composer scripts
 
 Consider using the rules and standards through composer scripts
 
@@ -121,7 +121,7 @@ where
 
 * `filename or directory` , the filename or directory of files you want to fix, defaults to the current directory.
 
-* :bulb: If you don't add this command to your `PATH`, you'll need to run it from the `./bin` directory in this repository, or if including this in a composer-enabled PHP project, the configured `bin-dir` (defaults to `./vendor/bin`).
+* :bulb: If you don't add this command to your `PATH`, you'll need to run it from the `./src` directory in this repository, or if including this in a composer-enabled PHP project, the configured `bin-dir` (defaults to `./vendor/bin`).
 
 
 
@@ -135,7 +135,7 @@ where
 
 * `since-ref` , is the remote commit reference to compare to, defaults to `HEAD`.
 
-* :bulb: If you don't add this command to your `PATH`, you'll need to run it from the `./bin` directory in this repository, or if including this in a composer-enabled PHP project, the configured `bin-dir` (defaults to `./vendor/bin`).
+* :bulb: If you don't add this command to your `PATH`, you'll need to run it from the `./src` directory in this repository, or if including this in a composer-enabled PHP project, the configured `bin-dir` (defaults to `./vendor/bin`).
 
 
 
@@ -151,7 +151,7 @@ where
 
 :warning: This will default to the **risky** rule set. See **Setting up global commands** on how to override this.
 
-:bulb: If you don't add this command to your `PATH`, you'll need to run it from the `./bin` directory in this repository, or if including this in a composer-enabled PHP project, the configured `bin-dir` (defaults to `./vendor/bin`).
+:bulb: If you don't add this command to your `PATH`, you'll need to run it from the `./src` directory in this repository, or if including this in a composer-enabled PHP project, the configured `bin-dir` (defaults to `./vendor/bin`).
 
 
 
@@ -168,7 +168,7 @@ where
 
 :warning: This will currently default to the **risky** rule set for new files, and **safe** rule set for existing files. See **Setting up global commands** on how to override this.
 
-:bulb: If you don't add this command to your `PATH`, you'll need to run it from the `./bin` directory in this repository, or if including this in a composer-enabled PHP project, the configured `bin-dir` (defaults to `./vendor/bin`).
+:bulb: If you don't add this command to your `PATH`, you'll need to run it from the `./src` directory in this repository, or if including this in a composer-enabled PHP project, the configured `bin-dir` (defaults to `./vendor/bin`).
 
 
 
