@@ -172,25 +172,6 @@ where
 
 
 
-### Using `php-cs-fixer` directly
-
-If you prefer to use the original `php-cs-fixer` command instead of the provided wrapper scripts, see [PHP CS Fixer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer)'s own documentation, but to use these rule sets when fixing files, it's:
-
-```shell
-php-cs-fixer fix [files] --config vendor/christianjbrown/php-code-quality-scripts/config/[rule-set].php
-```
-
-where
-* `files` is a list of files or directories to fix.
-* `rule-set` is the name or location of the rule set to use.
-
-#### Example
-
-```shell
-./bin/php-cs-fixer fix ./messy-code --config vendor/christianjbrown/php-code-quality-scripts/config/fix-risky.php
-```
-
-
 
 ## PHP CodeSniffer Standard
 
