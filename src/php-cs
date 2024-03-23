@@ -1,10 +1,7 @@
 #!/bin/bash
 
-THIS_DIR=$(dirname "${BASH_SOURCE[0]}")
+THIS_DIR=$(dirname "$SCRIPT_PATH")
 ROOT_DIR="$THIS_DIR/.."
-
-echo $THIS_DIR
-exit 1
 
 if [ -z "$PHP_CS" ]; then
   if test -f "$ROOT_DIR/bin/phpcs"; then
