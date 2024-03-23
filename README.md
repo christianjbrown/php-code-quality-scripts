@@ -7,12 +7,9 @@ This project
 * A set of **PHP CS Fixer rule sets** I prefer to use to clean up code to meet PSR, Symfony, Doctrine and PER standards. One riskier set for new files, and a safer set for existing files. 
 * Wrapper shell scripts
   * `./bin/php-cs` is a very simple wrapper around PHP Code Sniffer's own binary, to simplify the command line and load the right standard.
-  * `./bin/php-cs-diff` runs PHP Code Sniffer on files changed according to Git.
+  * `./bin/php-cs-diff` runs PHP Code Sniffer only on files changed according to Git.
   * `./bin/php-cs-fix` is a very simple wrapper around PHP-CS-Fixer's own binary, to simplify the command line and load the right ruleset.
-  * `./bin/php-cs-fix-diff` runs PHP CS Fixer on files changed according to Git. It runs risker rules on new files vs existing.
-
-
-
+  * `./bin/php-cs-fix-diff` runs PHP CS Fixer only on files changed according to Git. It runs more risky rules on new files vs existing.
 
 ## :heavy_check_mark: Prerequisites
 
@@ -26,73 +23,59 @@ This project
 \* These scripts have only been tested on MacOS, but will likely work in any Bash/Z-Shell environment.
 
 
-
 ## :building_construction: Installation
-
 
 
 ### As part of your composer-enabled project
 
-In the project you wish to use the phpcs stnadard and phpcsfixer rules in your project, require this library
+In the project you wish to use the phpcs standard and phpcsfixer rules in your project, require this library
 
 ```shell
 composer require --dev christianjbrown/php-code-quality-scripts
 ```
 
 
-
 #### Adding a composer script
 
-Consider adding it as a composer script
+Consider using the rules and standards through composer scripts
 
 ```json
 {
-    ...
     "scripts": {
-        "fix": [
-            "./bin/php-cs-fixer fix ./src --config=vendor/christianjbrown/php-code-quality-scripts/rule-sets/risky.php"
+        "check-style": [
+          "clear && ./bin/php-cs ./src ./tests"
+        ],
+        "check-style-diff": [
+          "clear && ./bin/php-cs-diff"
+        ],
+        "fix-style": [
+          "clear && ./bin/php-cs-fix ./src ./tests"
+        ],
+        "fix-style-diff": [
+          "clear && ./bin/php-cs-fix-diff"
         ]
-    },
-    ...
+    }
 }
 
 ```
 
-using a rule set to suit you.
-
-Alternatively, simplify with `php-cs-fix`
+Alternatively, you can use the original PHP Code Sniffer `phpcs` and PHP CS Fixer `php-cs-fixer` commands with the rules and standards provided:
 
 ```json
 {
-     ...
     "scripts": {
-         "fix": [
-            "./bin/php-cs-fix ./src"
+        "check-style": [
+            "clear && ./bin/phpcs --standard=vendor/christianjbrown/php-code-quality-scripts/standards/ChristianBrown/ruleset.xml ./src ./tests"
+        ],
+         "fix-style": [
+            "clear && ./bin/php-cs-fixer fix ./src ./tests -vvv --config=vendor/christianjbrown/php-code-quality-scripts/rule-sets/risky.php"
         ]
-    },
-    ...
+    }
 }
 
 ```
 
-so that, either way,  you can just run `composer fix`.
-
-Consider the same for `php-cs-fix-diff`
-
-```json
-{
-     ...
-    "scripts": {
-         "fix-diff": [
-            "./bin/php-cs-fix-diff ./src"
-        ]
-    },
-    ...
-}
-
-```
-
-so that you can just run `composer fix-diff`.
+In either case, you can run `composer check-style` or `composer fix-style` directly within your project.
 
 
 
@@ -111,15 +94,43 @@ If you want to use these tools in a standalone way, not specific to a project:
 If you want to use the shell scripts anywhere
 
 * Edit your `~/.bash_profile` or `~/.zshrc` and update or set the `PATH` variable to include the `./bin` directories within the directory you cloned this repository to. e.g.: `export PATH="[this-directory]/bin:$PATH"`.
-* Optionally you may also want to set the following with `export` 
+* Optionally you may also want to set the following with `export`
+  * `PHP_CS_STANDARD` - the default standard for `php-cs`, if you don't set this, it will default to `./standards/ChristianBrown`
   * `PHP_CS_FIX_CONFIG` - the default rule set for `php-cs-fix`, if you don't set this, it will default to `./rule-sets/risky.php`
-  * `PHP_CS_FIX_CONFIG_SAFE`   - the default rule set for `php-cs-fix-diff` to run on existing files, if you don't set this, it will currently default to `./rule-sets/safe.php`
-  * `PHP_CS_FIX_CONFIG_RISKY`  - the default rule set for `php-cs-fix-diff` to run on new and untracked files, if you don't set this, it will default to `./rule-sets/risky.php`
+  * `PHP_CS_FIX_CONFIG_SAFE` - the default rule set for `php-cs-fix-diff` to run on existing files, if you don't set this, it will currently default to `./rule-sets/safe.php`
+  * `PHP_CS_FIX_CONFIG_RISKY` - the default rule set for `php-cs-fix-diff` to run on new and untracked files, if you don't set this, it will default to `./rule-sets/risky.php`
 * Run `source ~/.bash_profile` or `source ~/.zshrc` to reload it.
 
 
 
 ## :computer: Usage
+
+
+### Using `php-cs`
+
+```shell
+php-cs [<filename or directory>]
+```
+
+where
+
+* `filename or directory` , the filename or directory of files you want to fix, defaults to the current directory.
+
+* :bulb: If you don't add this command to your `PATH`, you'll need to run it from the `./bin` directory in this repository, or if including this in a composer-enabled PHP project, the configured `bin-dir` (defaults to `./vendor/bin`).
+
+
+
+### Using `php-cs-diff`
+
+```shell
+php-cs-diff [since-ref]
+```
+
+where
+
+* `since-ref` , is the remote commit reference to compare to, defaults to `HEAD`.
+
+* :bulb: If you don't add this command to your `PATH`, you'll need to run it from the `./bin` directory in this repository, or if including this in a composer-enabled PHP project, the configured `bin-dir` (defaults to `./vendor/bin`).
 
 
 
@@ -176,7 +187,15 @@ where
 
 
 
-## PHP CodeSniffer Rule sets
+## PHP CodeSniffer Standard
+
+The PHPCS standards can be found in `./standards` directory.
+
+The only standard in there right now is `./standards/ChristianBrown` which is a set of rules based on various PSR, Symfony, Doctrine and PER standards, with a few more sprinkled in for extra goodness.
+
+
+
+## PHP CS Fixer Rule sets
 
 The rule sets can be found in the `./rule-sets` directory.
 
