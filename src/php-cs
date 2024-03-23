@@ -22,7 +22,7 @@ fi
 if [ -z "$*" ]; then
   FILES=$(pwd)
 else
-  FILES="$*"
+  FILES=$*
 fi
 
 if [ -z "$PHP_CS_STANDARD" ]; then
