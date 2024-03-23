@@ -10,8 +10,7 @@ if [ -z "$PHP_CS_FIX_CONFIG_RISKY" ]; then
   PHP_CS_FIX_CONFIG_RISKY=$ROOT_DIR/rule-sets/risky.php
 fi
 if [ -z "$PHP_CS_FIX_CONFIG_SAFE" ]; then
-  # For now, we use the same config for safe and risky, see README.md
-  PHP_CS_FIX_CONFIG_SAFE=$PHP_CS_FIX_CONFIG_RISKY
+  PHP_CS_FIX_CONFIG_SAFE=$ROOT_DIR/rule-sets/safe.php
 fi
 
 
