@@ -38,4 +38,4 @@ elif ! test -f "$PHP_CS_FIX_CONFIG"; then
 fi
 
 echo "Running php-cs-fixer on $FILES with rules file $PHP_CS_FIX_CONFIG ..."
-$PHP_CS_FIXER fix "$FILES" -vvv --config="$PHP_CS_FIX_CONFIG"
+$PHP_CS_FIXER fix $FILES -vvv --config="$PHP_CS_FIX_CONFIG"
