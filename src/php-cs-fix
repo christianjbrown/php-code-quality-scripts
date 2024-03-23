@@ -19,7 +19,7 @@ elif ! test -f "$PHP_CS_FIXER"; then
   exit 1
 fi
 
-FILES=${1:-$(pwd)}
+FILES=${"$@":-$(pwd)}
 
 
 if [ -z "$PHP_CS_FIX_CONFIG" ]; then
