@@ -4,6 +4,20 @@ THIS_DIR=$(dirname "${BASH_SOURCE[0]}")
 ROOT_DIR="$THIS_DIR/.."
 PHP_CS_FIXER="$ROOT_DIR/bin/php-cs-fixer"
 
+if [ -z "$PHP_CS_FIXER" ]; then
+  if test -f "$ROOT_DIR/bin/php-cs-fixer"; then
+      PHP_CS_FIXER="$ROOT_DIR/bin/php-cs-fixer"
+  elif test -f "$THIS_DIR/php-cs-fixer"; then
+      PHP_CS_FIXER="$THIS_DIR/php-cs-fixer"
+  else
+      echo "No PHP CS Fixer executable set, and defaults not found in normal location." 1>&2
+      exit 1
+  fi
+elif ! test -f "$PHP_CS_FIXER"; then
+  echo "PHP CS Fixer executable $PHP_CS_FIXER not found." 1>&2
+  exit 1
+fi
+
 FILES=${1:-$(pwd)}
 
 
