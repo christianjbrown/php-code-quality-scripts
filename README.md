@@ -59,6 +59,9 @@ Consider using the rules and standards through composer scripts
         "fix-style-diff": [
           "clear && ./bin/php-cs-fix-diff"
         ]
+    },
+    "config": {
+        "bin-dir": "bin"
     }
 }
 
@@ -75,6 +78,9 @@ Alternatively, you can use the original PHP Code Sniffer `phpcs` and PHP CS Fixe
          "fix-style": [
             "clear && ./bin/php-cs-fixer fix --config=vendor/christianjbrown/php-code-quality-scripts/config/fix-risky.php ./src ./tests"
         ]
+    },
+    "config": {
+        "bin-dir": "bin"
     }
 }
 
