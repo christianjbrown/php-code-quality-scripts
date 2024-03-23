@@ -3,7 +3,7 @@
 THIS_DIR=$(dirname "${BASH_SOURCE[0]}")
 ROOT_DIR="$THIS_DIR/.."
 
-echo THIS_DIR
+echo $THIS_DIR
 exit 1
 
 if [ -z "$PHP_CS" ]; then
