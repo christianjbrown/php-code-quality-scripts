@@ -17,10 +17,10 @@ This project
 
 - Bash/Z-Shell*
 - [Git](https://git-scm.com/)
-- [PHP](https://www.php.net/) 8.2
+- [PHP](https://www.php.net/) 8.2 or higher (8.x)
 - [Composer](https://getcomposer.org/)
 
-:bulb: If you're on macOS and have [HomeBrew](https://brew.sh/), PHP and Composer will install with `brew install composer`. If you run `php -v` and there are errors, you may also need to `brew install gd`
+:bulb: If you're on macOS and have [HomeBrew](https://brew.sh/), PHP and Composer will install with `brew install composer`. 
 
 \* These scripts have only been tested on MacOS, but will likely work in any Bash/Z-Shell environment.
 
