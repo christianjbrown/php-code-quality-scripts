@@ -22,8 +22,8 @@ fi
 SINCE_COMMIT=${1:-HEAD}
 
 if [ -z "$PHP_CS_FIX_CONFIG_RISKY" ]; then
-  if test -f "$ROOT_DIR/config/fix-risky.php"; then
-      PHP_CS_FIX_CONFIG_RISKY="$ROOT_DIR/config/fix-risky.php"
+  if test -f "$ROOT_DIR/config/FixRisky.php"; then
+      PHP_CS_FIX_CONFIG_RISKY="$ROOT_DIR/config/FixRisky.php"
   else
       echo "No PHP CS Fixer risky rules file set, and defaults not found in normal location." 1>&2
       exit 1
@@ -34,8 +34,8 @@ elif ! test -f "$PHP_CS_FIX_CONFIG_RISKY"; then
 fi
 
 if [ -z "$PHP_CS_FIX_CONFIG_SAFE" ]; then
-  if test -f "$ROOT_DIR/config/fix-safe.php"; then
-      PHP_CS_FIX_CONFIG_SAFE="$ROOT_DIR/config/fix-safe.php"
+  if test -f "$ROOT_DIR/config/FixSafe.php"; then
+      PHP_CS_FIX_CONFIG_SAFE="$ROOT_DIR/config/FixSafe.php"
   else
       echo "No PHP CS Fixer SAFE rules file set, and defaults not found in normal location." 1>&2
       exit 1

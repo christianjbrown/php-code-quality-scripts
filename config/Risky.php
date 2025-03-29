@@ -1,8 +1,11 @@
 <?php
 
+// phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
+
 declare(strict_types=1);
 
 use PhpCsFixer\Config;
+use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 
 $rules = [
     '@DoctrineAnnotation' => true,
@@ -315,5 +318,6 @@ $config = new Config('risky');
 $config->setRiskyAllowed(true);
 $config->setUsingCache(false);
 $config->setRules($rules);
+$config->setParallelConfig(ParallelConfigFactory::detect());
 
 return $config;
