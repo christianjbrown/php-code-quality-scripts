@@ -1,8 +1,11 @@
 <?php
 
+// phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
+
 declare(strict_types=1);
 
 use PhpCsFixer\Config;
+use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 
 $rules = [
     '@DoctrineAnnotation' => true,
@@ -49,6 +52,7 @@ $rules = [
     'control_structure_continuation_position' => true,
     'declare_equal_normalize' => true,
     'declare_parentheses' => true,
+    'declare_strict_types' => false,
     'doctrine_annotation_array_assignment' => true,
     'doctrine_annotation_braces' => true,
     'doctrine_annotation_indentation' => true,
@@ -209,5 +213,6 @@ $config = new Config('safe');
 $config->setRiskyAllowed(false);
 $config->setUsingCache(false);
 $config->setRules($rules);
+$config->setParallelConfig(ParallelConfigFactory::detect());
 
 return $config;

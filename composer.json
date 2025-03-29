@@ -2,7 +2,7 @@
     "name": "christianjbrown/php-code-quality-scripts",
     "type": "project",
     "require": {
-        "php": "~8.2",
+        "php": "~8.3",
         "ext-mbstring": "*",
         "ext-xdebug": "*",
         "escapestudios/symfony2-coding-standard": "^3.13",
@@ -15,10 +15,28 @@
         "src/php-cs-fix",
         "src/php-cs-fix-diff"
     ],
+    "require-dev": {
+        "phpunit/phpunit": "^12.0@dev"
+    },
     "scripts": {
+        "test": [
+            "clear && XDEBUG_MODE=coverage ./bin/phpunit -d memory_limit=512M && open ./.phpunit.cache/code-coverage-html/index.html"
+        ],
+        "check-style": [
+            "clear && ./src/php-cs ./config ./tests"
+        ],
+        "check-style-diff": [
+            "clear && ./src/php-cs-diff"
+        ],
+        "fix-style": [
+            "clear && ./src/php-cs-fix ./config ./tests"
+        ],
+        "fix-style-diff": [
+            "clear && ./src/php-cs-fix-diff"
+        ],
         "setup-standards": [
             "./bin/phpcs --config-set installed_paths `pwd`/config > /dev/null",
-            "./bin/phpcs --config-set default_standard `pwd`/config/ChristianBrown.xml > /dev/null"
+            "./bin/phpcs --config-set default_standard `pwd`/config/standard.xml > /dev/null"
         ],
         "post-install-cmd": [
             "@setup-standards"
