@@ -9,6 +9,7 @@
     <!-- Symfony rules, minus some -->
 
     <rule ref="vendor/escapestudios/symfony2-coding-standard/Symfony">
+        <exclude name="Generic.Functions.CallTimePassByReference" />
         <exclude name="PEAR.Commenting.FunctionComment.Missing" />
         <exclude name="PEAR.Commenting.ClassComment.Missing" />
         <exclude name="Symfony.Commenting.ClassComment.Missing" />
@@ -56,10 +57,12 @@
     <rule ref="Generic.WhiteSpace.ScopeIndent">
         <properties>
             <property name="exact" value="true" />
-            <property name="ignoreIndentationTokens" type="array" value="T_COMMENT,T_DOC_COMMENT_OPEN_TAG" />
+            <property name="ignoreIndentationTokens" type="array">
+                <element value="T_COMMENT"/>
+                <element value="T_DOC_COMMENT_OPEN_TAG"/>
+            </property>
         </properties>
     </rule>
-    <rule ref="MySource.PHP.GetRequestData" />
     <rule ref="PEAR.Commenting.ClassComment">
         <!-- We do not use these class tags -->
         <exclude name="PEAR.Commenting.ClassComment.MissingCategoryTag" />
