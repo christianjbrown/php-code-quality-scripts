@@ -1,26 +1,42 @@
 name: CI
+
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '**.md'
+      - LICENSE
+      - .gitignore
   pull_request:
     branches: [main]
+    paths-ignore:
+      - '**.md'
+      - LICENSE
+      - .gitignore
   workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
           coverage: xdebug
+
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
+
       - name: Check code style
         run: ./src/php-cs ./config ./tests
+
       - name: Static analysis
         run: ./bin/phpstan analyse --no-progress
+
       - name: Run tests with coverage
         run: XDEBUG_MODE=coverage php -d memory_limit=-1 ./bin/phpunit

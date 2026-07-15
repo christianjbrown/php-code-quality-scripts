@@ -1,4 +1,4 @@
-# :wrench: PHP Code Quality Scripts
+# PHP Code Quality Scripts
 
 [![CI](https://github.com/christianjbrown/php-code-quality-scripts/actions/workflows/ci.yml/badge.svg)](https://github.com/christianjbrown/php-code-quality-scripts/actions/workflows/ci.yml)
 
