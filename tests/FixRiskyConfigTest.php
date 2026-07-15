@@ -1,8 +1,8 @@
 <?php
 
-// phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
-
 declare(strict_types=1);
+
+namespace ChristianBrown\CodeQualityScripts\Tests;
 
 use PhpCsFixer\Config;
 use PhpCsFixer\Runner\Parallel\ParallelConfig;
@@ -11,9 +11,9 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  *
- * @coversNothing
+ * @see ../config/Risky.php
  *
- * @see ../config/fix-risky.php
+ * @coversNothing
  */
 final class FixRiskyConfigTest extends TestCase
 {
@@ -28,11 +28,10 @@ final class FixRiskyConfigTest extends TestCase
         self::assertInstanceOf(ParallelConfig::class, $parallelConfig);
 
         $rules = $config->getRules();
-        self::assertIsArray($rules);
         self::assertArrayHasKey('@DoctrineAnnotation', $rules);
         self::assertTrue($rules['@DoctrineAnnotation']);
-        self::assertArrayHasKey('@PHP80Migration', $rules);
-        self::assertTrue($rules['@PHP80Migration']);
+        self::assertArrayHasKey('@PHP8x0Migration', $rules);
+        self::assertTrue($rules['@PHP8x0Migration']);
         self::assertArrayHasKey('array_syntax', $rules);
         self::assertSame(['syntax' => 'short'], $rules['array_syntax']);
         self::assertArrayHasKey('binary_operator_spaces', $rules);
@@ -49,7 +48,7 @@ final class FixRiskyConfigTest extends TestCase
         self::assertTrue($rules['no_unused_imports']);
         self::assertArrayHasKey('single_quote', $rules);
         self::assertTrue($rules['single_quote']);
-        self::assertArrayHasKey('visibility_required', $rules);
-        self::assertTrue($rules['visibility_required']);
+        self::assertArrayHasKey('modifier_keywords', $rules);
+        self::assertTrue($rules['modifier_keywords']);
     }
 }

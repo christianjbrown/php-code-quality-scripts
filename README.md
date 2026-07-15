@@ -1,10 +1,12 @@
 # :wrench: PHP Code Quality Scripts
 
+[![CI](https://github.com/christianjbrown/php-code-quality-scripts/actions/workflows/ci.yml/badge.svg)](https://github.com/christianjbrown/php-code-quality-scripts/actions/workflows/ci.yml)
+
 This project
 
 * Installs [PHP Code Sniffer](https://github.com/squizlabs/PHP_CodeSniffer) and [PHP CS Fixer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer)
-* A **PHP Code Sniffer standard** I prefer to use, building upon existing PSR, Symfony, Doctrine and PER standards.
-* A set of **PHP CS Fixer rule sets** I prefer to use to clean up code to meet PSR, Symfony, Doctrine and PER standards. One riskier set for new files, and a safer set for existing files. 
+* A **PHP Code Sniffer standard** I prefer to use, building upon existing PSR, Symfony, PEAR and Generic standards.
+* A set of **PHP CS Fixer rule sets** I prefer to use to clean up code to meet PSR, Symfony, PEAR and Generic standards. One riskier set for new files, and a safer set for existing files. 
 * Wrapper shell scripts
   * `./src/php-cs` is a very simple wrapper around PHP Code Sniffer's own binary, to simplify the command line and load the right standard.
   * `./src/php-cs-diff` runs PHP Code Sniffer only on files changed according to Git.
@@ -21,6 +23,8 @@ This project
 - [Composer](https://getcomposer.org/)
 
 :bulb: If you're on MacOS and have [Homebrew](https://brew.sh/), PHP and Composer will install with `brew install composer`. 
+
+:bulb: [Xdebug](https://xdebug.org/) is only needed if you want to work on this repository itself (it generates the test coverage report). Consumers of the package don't need it. See **Development** below.
 
 \* These scripts have only been tested on MacOS, but will likely work in any Bash/Z-Shell environment.
 
@@ -94,7 +98,7 @@ In either case, you can run `composer check-style` or `composer fix-style` direc
 
 If you want to use these tools in a standalone way, not specific to a project:
 
-* `git clone` his repository to a directory of choice on your local machine.
+* `git clone` this repository to a directory of choice on your local machine.
 * change to the install directory and run `composer update`
 * See **Setting up global commands** below
 
@@ -110,11 +114,15 @@ If you want to use the shell scripts anywhere
   * `PHP_CS_FIX_CONFIG` - the default rule set for `php-cs-fix`, if you don't set this, it will default to `./config/Risky.php`
   * `PHP_CS_FIX_CONFIG_SAFE` - the default rule set for `php-cs-fix-diff` to run on existing files, if you don't set this, it will currently default to `./config/Safe.php`
   * `PHP_CS_FIX_CONFIG_RISKY` - the default rule set for `php-cs-fix-diff` to run on new and untracked files, if you don't set this, it will default to `./config/Risky.php`
+  * `PHP_CS` - the PHP Code Sniffer binary used by `php-cs` and `php-cs-diff`, if you don't set this, it is resolved automatically (installed dependency, the consumer's `vendor/bin`, or a local `bin/`)
+  * `PHP_CS_FIXER` - the PHP CS Fixer binary used by `php-cs-fix` and `php-cs-fix-diff`, resolved the same way if you don't set it
 * Run `source ~/.bash_profile` or `source ~/.zshrc` to reload it.
 
 
 
 ## :computer: Usage
+
+:bulb: If you don't add these commands to your `PATH`, you'll need to run them from the `./src` directory in this repository, or if including this in a composer-enabled PHP project, the configured `bin-dir` (defaults to `./vendor/bin`).
 
 
 ### Using `php-cs`
@@ -125,9 +133,7 @@ php-cs [<filename or directory>]
 
 where
 
-* `filename or directory` , the filename or directory of files you want to fix, defaults to the current directory.
-
-* :bulb: If you don't add this command to your `PATH`, you'll need to run it from the `./src` directory in this repository, or if including this in a composer-enabled PHP project, the configured `bin-dir` (defaults to `./vendor/bin`).
+* `filename or directory` , the filename or directory of files you want to check, defaults to the current directory.
 
 
 
@@ -139,9 +145,7 @@ php-cs-diff [since-ref]
 
 where
 
-* `since-ref` , is the remote commit reference to compare to, defaults to `HEAD`.
-
-* :bulb: If you don't add this command to your `PATH`, you'll need to run it from the `./src` directory in this repository, or if including this in a composer-enabled PHP project, the configured `bin-dir` (defaults to `./vendor/bin`).
+* `since-ref` , is the git commit reference to compare against, defaults to `HEAD`.
 
 
 
@@ -157,8 +161,6 @@ where
 
 :warning: This will default to the **risky** rule set. See **Setting up global commands** on how to override this.
 
-:bulb: If you don't add this command to your `PATH`, you'll need to run it from the `./src` directory in this repository, or if including this in a composer-enabled PHP project, the configured `bin-dir` (defaults to `./vendor/bin`).
-
 
 
 ### Using `php-cs-fix-diff`
@@ -170,11 +172,9 @@ php-cs-fix-diff [since-ref]
 
 where
 
-* `since-ref` , is the remote commit reference to compare to, defaults to `HEAD`.
+* `since-ref` , is the git commit reference to compare against, defaults to `HEAD`.
 
 :warning: This will currently default to the **risky** rule set for new files, and **safe** rule set for existing files. See **Setting up global commands** on how to override this.
-
-:bulb: If you don't add this command to your `PATH`, you'll need to run it from the `./src` directory in this repository, or if including this in a composer-enabled PHP project, the configured `bin-dir` (defaults to `./vendor/bin`).
 
 
 
@@ -183,7 +183,7 @@ where
 
 The PHPCS standards can be found in `./config` directory.
 
-The only standard in there right now is `./config/standard.xml` which is a set of rules based on various PSR, Symfony, Doctrine and PER standards, with a few more sprinkled in for extra goodness.
+The only standard in there right now is `./config/standard.xml` which is a set of rules based on various PSR, Symfony, PEAR and Generic standards, with a few more sprinkled in for extra goodness.
 
 
 
@@ -197,15 +197,47 @@ They can be generated by a handy user interface provided at https://mlocati.gith
 
 Rule set: `Risky.php`
 
-A set of risky non-backward compatible rules based on various PSR, Symfony, Doctrine and PER standards, with a few more sprinkled in for extra goodness. If you use this, you will want to have very good test coverage, but at the end you will have some very neat code.
+A set of risky non-backward compatible rules based on various PSR, Symfony, PEAR and Generic standards, with a few more sprinkled in for extra goodness. If you use this, you will want to have very good test coverage, but at the end you will have some very neat code.
 
 ### :construction_worker: Safe
 
 Rule set: `Safe.php`
 
-A set of safer backward-compatible rules based on various PSR, Symfony, Doctrine and PER standards, with a few more sprinkled in for extra goodness. This is better for running on existing legacy codebases which you may to be too risky to make too many changes to in one go.
+A set of safer backward-compatible rules based on various PSR, Symfony, PEAR and Generic standards, with a few more sprinkled in for extra goodness. This is better for running on existing legacy codebases which you may to be too risky to make too many changes to in one go.
 
 
+
+
+## :hammer_and_wrench: Development
+
+This section is for working on the package itself, not for consuming it.
+
+The repository **dogfoods its own standard** — `composer check-style` runs the `ChristianBrown`
+standard over `config` and `tests`, and CI fails on any violation, so any PHP added here must
+already conform.
+
+Requires PHP **8.3** and **Xdebug** (Xdebug is only needed to generate the test coverage report).
+Both `bin/` and `vendor/` are gitignored and Composer-installed, so run `composer install` first —
+its `post-install-cmd` runs `setup-standards`, which registers the phpcs standard so `./src/php-cs`
+works.
+
+| Task | Command |
+| --- | --- |
+| Run tests + coverage (opens HTML report) | `composer test` |
+| Static analysis (PHPStan level max) | `composer stan` |
+| Check code style | `composer check-style` |
+| Auto-fix code style | `composer fix-style` |
+| Check / fix style on git diff only | `composer check-style-diff` / `composer fix-style-diff` |
+
+Recommended order before finishing a change: `composer fix-style` → `composer check-style` →
+`composer stan` → `composer test`. CI (`.github/workflows/ci.yml`) runs the same gates on push/PR
+to `main`.
+
+
+
+## :page_facing_up: License
+
+Released under the [MIT License](LICENSE).
 
 
 
