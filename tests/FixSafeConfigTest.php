@@ -6,15 +6,15 @@ namespace ChristianBrown\CodeQualityScripts\Tests;
 
 use PhpCsFixer\Config;
 use PhpCsFixer\Runner\Parallel\ParallelConfig;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  *
  * @see ../config/Safe.php
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class FixSafeConfigTest extends TestCase
 {
     public function test(): void
