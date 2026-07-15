@@ -4,7 +4,11 @@
     "type": "library",
     "license": "MIT",
     "keywords": ["php-cs-fixer", "phpcs", "coding-standard", "code-quality", "static-analysis"],
-    "authors": [{ "name": "Christian Brown" }],
+    "authors": [
+        {
+            "name": "Christian Brown"
+        }
+    ],
     "require": {
         "php": "^8.3",
         "ext-mbstring": "*",
@@ -13,16 +17,16 @@
         "friendsofphp/php-cs-fixer": "^3.74",
         "squizlabs/php_codesniffer": "^3.12"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^12.0",
+        "phpstan/phpstan": "^2.0"
+    },
     "bin": [
         "src/php-cs",
         "src/php-cs-diff",
         "src/php-cs-fix",
         "src/php-cs-fix-diff"
     ],
-    "require-dev": {
-        "phpunit/phpunit": "^12.0",
-        "phpstan/phpstan": "^2.0"
-    },
     "autoload-dev": {
         "psr-4": {
             "ChristianBrown\\CodeQualityScripts\\Tests\\": "tests/"

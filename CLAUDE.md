@@ -62,7 +62,7 @@ Run order before finishing: `composer fix-style` → `composer check-style` → 
 PHPUnit-with-coverage — on push/PR to `main`, on PHP 8.3. All dependencies are public, so no
 Composer auth is needed.
 
-## Conventions
+## Conventions (follow all of these)
 
 - The config PHP files carry `declare(strict_types=1);` and the namespace-less `phpcs:disable`
   header described above — keep both.
