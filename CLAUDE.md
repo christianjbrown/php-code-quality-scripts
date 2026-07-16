@@ -70,10 +70,13 @@ Composer auth is needed.
   `config` and `tests`, and CI fails on any violation, so any PHP you add must already conform. When
   editing a rule set, run `composer fix-style` then `composer check-style` and confirm both are
   clean with no deprecation warnings.
-- Tests are `final`, namespaced, use PHPUnit 12 **attributes not annotations** (`#[CoversNothing]`,
-  since the config files aren't classes), and assert statically with `self::assertSame` /
-  `self::assert*`. `phpunit.xml` is strict (`requireCoverageMetadata`, `beStrictAboutCoverageMetadata`,
-  `failOnRisky`, `failOnWarning`, path coverage), so every test needs coverage metadata.
+- Tests are `final`, namespaced, and assert statically with `self::assertSame` / `self::assert*`.
+  They cover the config files by `include`-ing them, which executes every line. Because the config
+  files are bare `return`-a-`Config` scripts (no class/function to name as a coverage target),
+  `phpunit.xml` deliberately does **not** set `requireCoverageMetadata` /
+  `beStrictAboutCoverageMetadata` — those would force `#[CoversNothing]` and discard the config-file
+  line coverage. It keeps `failOnRisky`, `failOnWarning`, and path coverage; the suite reports 100%
+  line coverage of `config/`.
 - Keep the **Risky vs Safe** split meaningful: a rule belongs in `Safe.php` only if it is
   backward-compatible and safe to run unattended on legacy code; anything that can change behavior
   (strict types/comparisons, finalization, migrations) is Risky-only.

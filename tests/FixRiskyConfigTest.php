@@ -6,7 +6,6 @@ namespace ChristianBrown\CodeQualityScripts\Tests;
 
 use PhpCsFixer\Config;
 use PhpCsFixer\Runner\Parallel\ParallelConfig;
-use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -14,7 +13,6 @@ use PHPUnit\Framework\TestCase;
  *
  * @see ../config/Risky.php
  */
-#[CoversNothing]
 final class FixRiskyConfigTest extends TestCase
 {
     public function test(): void
