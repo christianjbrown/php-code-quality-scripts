@@ -59,7 +59,7 @@ gitignored and Composer-installed, so run `composer install` first — its `post
 
 Run order before finishing: `composer fix-style` → `composer check-style` → `composer stan` →
 `composer test`. CI (`.github/workflows/ci.yml`) runs the same gates — style → PHPStan →
-PHPUnit-with-coverage — on push/PR to `main`, on PHP 8.3. All dependencies are public, so no
+PHPUnit-with-coverage — on push/PR to `main`, on PHP 8.5. All dependencies are public, so no
 Composer auth is needed.
 
 ## Conventions (follow all of these)

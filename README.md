@@ -19,7 +19,7 @@ This project
 
 - Bash/Z-Shell*
 - [Git](https://git-scm.com/)
-- [PHP](https://www.php.net/) 8.3 or higher (8.x)
+- [PHP](https://www.php.net/) 8.5 or higher (8.x)
 - [Composer](https://getcomposer.org/)
 
 :bulb: If you're on MacOS and have [Homebrew](https://brew.sh/), PHP and Composer will install with `brew install composer`. 
@@ -216,7 +216,7 @@ The repository **dogfoods its own standard** — `composer check-style` runs the
 standard over `config` and `tests`, and CI fails on any violation, so any PHP added here must
 already conform.
 
-Requires PHP **8.3** and **Xdebug** (Xdebug is only needed to generate the test coverage report).
+Requires PHP **8.5** and **Xdebug** (Xdebug is only needed to generate the test coverage report).
 Both `bin/` and `vendor/` are gitignored and Composer-installed, so run `composer install` first —
 its `post-install-cmd` runs `setup-standards`, which registers the phpcs standard so `./src/php-cs`
 works.
