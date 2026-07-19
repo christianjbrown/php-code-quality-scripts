@@ -1,9 +1,11 @@
 #!/bin/bash
 
+set -uo pipefail
+
 THIS_DIR=$(dirname "${BASH_SOURCE[0]}")
 ROOT_DIR="$THIS_DIR/.."
 
-if [ -z "$PHP_CS_FIXER" ]; then
+if [ -z "${PHP_CS_FIXER:-}" ]; then
   if test -f "$ROOT_DIR/../../../bin/php-cs-fixer"; then
       PHP_CS_FIXER="$ROOT_DIR/../../../bin/php-cs-fixer"
   elif test -f "$ROOT_DIR/../../../vendor/bin/php-cs-fixer"; then
@@ -20,12 +22,12 @@ elif ! test -f "$PHP_CS_FIXER"; then
 fi
 
 if [ -z "$*" ]; then
-  FILES=$(pwd)
+  FILES=("$(pwd)")
 else
-  FILES=$*
+  FILES=("$@")
 fi
 
-if [ -z "$PHP_CS_FIX_CONFIG" ]; then
+if [ -z "${PHP_CS_FIX_CONFIG:-}" ]; then
   if test -f "$ROOT_DIR/config/Risky.php"; then
       PHP_CS_FIX_CONFIG="$ROOT_DIR/config/Risky.php"
   else
@@ -37,5 +39,5 @@ elif ! test -f "$PHP_CS_FIX_CONFIG"; then
   exit 1
 fi
 
-echo "Running php-cs-fixer on $FILES with rules file $PHP_CS_FIX_CONFIG ..."
-$PHP_CS_FIXER fix $FILES -vvv --config="$PHP_CS_FIX_CONFIG"
+echo "Running php-cs-fixer on ${FILES[*]} with rules file $PHP_CS_FIX_CONFIG ..."
+"$PHP_CS_FIXER" fix "${FILES[@]}" -vvv --config="$PHP_CS_FIX_CONFIG"
