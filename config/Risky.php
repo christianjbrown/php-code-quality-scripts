@@ -171,7 +171,13 @@ $rules = [
     'no_spaces_after_function_name' => true,
     'no_spaces_around_offset' => true,
     'no_superfluous_elseif' => true,
-    'no_superfluous_phpdoc_tags' => true,
+    // Disabled: it strips a scalar @param whose type merely repeats the signature,
+    // which on a method with a later array-shape @param leaves a lone non-first @param
+    // that the phpcs Symfony/PEAR FunctionComment.ParamNameNoMatch sniff then rejects
+    // (fixer-vs-phpcs conflict). Keeping it off makes `fix-style` output pass
+    // `check-style`: @param blocks stay complete, matching the estate convention of
+    // avoiding lone non-first @param tags.
+    'no_superfluous_phpdoc_tags' => false,
     'no_trailing_comma_in_singleline' => true,
     'no_trailing_whitespace' => true,
     'no_trailing_whitespace_in_comment' => true,
