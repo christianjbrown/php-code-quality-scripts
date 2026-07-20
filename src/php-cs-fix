@@ -21,6 +21,24 @@ elif ! test -f "$PHP_CS_FIXER"; then
   exit 1
 fi
 
+# phpcbf runs after php-cs-fixer to auto-fix the slevomat (and other phpcs)
+# violations that php-cs-fixer does not, e.g. TypeHints.*UselessAnnotation.
+if [ -z "${PHP_CS_BF:-}" ]; then
+  if test -f "$ROOT_DIR/../../../bin/phpcbf"; then
+      PHP_CS_BF="$ROOT_DIR/../../../bin/phpcbf"
+  elif test -f "$ROOT_DIR/../../../vendor/bin/phpcbf"; then
+      PHP_CS_BF="$ROOT_DIR/../../../vendor/bin/phpcbf"
+  elif test -f "$ROOT_DIR/bin/phpcbf"; then
+      PHP_CS_BF="$ROOT_DIR/bin/phpcbf"
+  else
+      echo "No PHP CodeSniffer fixer (phpcbf) executable set, and defaults not found in normal location." 1>&2
+      exit 1
+  fi
+elif ! test -f "$PHP_CS_BF"; then
+  echo "PHP CodeSniffer fixer (phpcbf) executable $PHP_CS_BF not found." 1>&2
+  exit 1
+fi
+
 if [ -z "$*" ]; then
   FILES=("$(pwd)")
 else
@@ -39,5 +57,40 @@ elif ! test -f "$PHP_CS_FIX_CONFIG"; then
   exit 1
 fi
 
+if [ -z "${PHP_CS_STANDARD:-}" ]; then
+  if test -f "$ROOT_DIR/config/standard.xml"; then
+      PHP_CS_STANDARD="$ROOT_DIR/config/standard.xml"
+  else
+      echo "No PHP CodeSniffer standard set, and defaults not found in normal location." 1>&2
+      exit 1
+  fi
+elif ! test -f "$PHP_CS_STANDARD"; then
+  echo "PHP CodeSniffer standard $PHP_CS_STANDARD not found." 1>&2
+  exit 1
+fi
+
 echo "Running php-cs-fixer on ${FILES[*]} with rules file $PHP_CS_FIX_CONFIG ..."
 "$PHP_CS_FIXER" fix "${FILES[@]}" -vvv --config="$PHP_CS_FIX_CONFIG"
+FIXER_EXIT=$?
+
+# php-cs-fixer in fix mode exits 0 on success (even when it changed files); a
+# non-zero code means a genuine error (invalid config, lint failure, exception),
+# so surface it and do not go on to phpcbf.
+if [ "$FIXER_EXIT" -ne 0 ]; then
+  exit "$FIXER_EXIT"
+fi
+
+echo "Running phpcbf on ${FILES[*]} with standard from $PHP_CS_STANDARD ..."
+"$PHP_CS_BF" --standard="$PHP_CS_STANDARD" "${FILES[@]}"
+PHPCBF_EXIT=$?
+
+# phpcbf exit codes (PHP_CodeSniffer 4): 0 = nothing to fix, 1 = auto-fixable issues
+# remain, 2 = non-auto-fixable issues remain. All three are normal outcomes of a fix
+# pass (whatever is left is for check-style to report), so treat them as success.
+# 4 = a file failed to fix (fixer conflict), 16 = process error, 64 = requirements not
+# met — those are genuine failures and are surfaced.
+if [ "$PHPCBF_EXIT" -ge 4 ]; then
+  exit "$PHPCBF_EXIT"
+fi
+
+exit 0

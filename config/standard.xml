@@ -6,21 +6,23 @@
     <arg value="s" />
     <arg name="colors" />
 
-    <!-- Symfony rules, minus some -->
+    <!--
+        PHP_CodeSniffer 4 ruleset.
 
-    <rule ref="vendor/escapestudios/symfony2-coding-standard/Symfony">
-        <exclude name="Generic.Functions.CallTimePassByReference" />
-        <exclude name="PEAR.Commenting.FunctionComment.Missing" />
-        <exclude name="PEAR.Commenting.ClassComment.Missing" />
-        <exclude name="Symfony.Commenting.ClassComment.Missing" />
-        <exclude name="Symfony.Commenting.FunctionComment.Missing" />
-        <exclude name="Symfony.Commenting.FunctionComment.MissingParamTag" />
-        <exclude name="Symfony.Commenting.FunctionComment.MissingReturn" />
-        <exclude name="Symfony.Commenting.License" />
-        <exclude name="Zend.NamingConventions.ValidVariableName.MemberVarContainsNumbers" />
-    </rule>
+        The escapestudios/symfony2-coding-standard "Symfony" ref used up to v1 was
+        PHP_CodeSniffer 3 only (it hard-`conflicts` cs>=4) so it has been removed. Its
+        formatting sniffs were already owned by php-cs-fixer (see config/Risky.php /
+        config/Safe.php — @PhpCsFixer, @Symfony, @PSR12 and the :risky variants); its
+        genuine lint value is replaced below by slevomat sniffs plus the two built-in
+        naming sniffs it used to pull in transitively (Zend.NamingConventions.ValidVariableName
+        and Squiz.Classes.ValidClassName, the latter via PSR1/PSR2).
 
-    <!-- Additional rules, checking code style -->
+        The global excludes and severity-0 suppressions that used to live on the removed
+        Symfony <rule> block are re-applied on the standalone PEAR blocks below, so the set
+        of reported violations is unchanged from v1 aside from the intentional slevomat adds.
+    -->
+
+    <!-- ===== Preserved built-in rules (unchanged from the v1 standard.xml) ===== -->
 
     <rule ref="Generic.Arrays.DisallowLongArraySyntax" />
     <rule ref="Generic.CodeAnalysis.AssignmentInCondition" />
@@ -64,6 +66,8 @@
         </properties>
     </rule>
     <rule ref="PEAR.Commenting.ClassComment">
+        <!-- Class doc comments are not required (was excluded on the removed Symfony block) -->
+        <exclude name="PEAR.Commenting.ClassComment.Missing" />
         <!-- We do not use these class tags -->
         <exclude name="PEAR.Commenting.ClassComment.MissingCategoryTag" />
         <exclude name="PEAR.Commenting.ClassComment.MissingPackageTag" />
@@ -72,17 +76,19 @@
         <exclude name="PEAR.Commenting.ClassComment.MissingLinkTag" />
     </rule>
     <rule ref="PEAR.Commenting.FunctionComment">
+        <!-- Function doc comments are not required (was excluded on the removed Symfony block) -->
+        <exclude name="PEAR.Commenting.FunctionComment.Missing" />
+
         <!-- We do not require param comments -->
         <exclude name="PEAR.Commenting.FunctionComment.MissingParamComment" />
 
         <exclude name="PEAR.Commenting.FunctionComment.MissingReturn" />
         <exclude name="PEAR.Commenting.FunctionComment.MissingParamTag" />
 
-        <!-- Duplicate functionality of Symfony.Commenting.FunctionComment.MissingParamName -->
+        <!-- Duplicate functionality of the former Symfony.Commenting.FunctionComment.MissingParamName -->
         <exclude name="PEAR.Commenting.FunctionComment.MissingParamName" />
         <exclude name="PEAR.Commenting.FunctionComment.SpacingAfterParamType" />
         <exclude name="PEAR.Commenting.FunctionComment.ExtraParamComment" />
-
     </rule>
     <rule ref="PEAR.Commenting.InlineComment" />
     <rule ref="PEAR.ControlStructures.ControlSignature" />
@@ -90,23 +96,70 @@
     <rule ref="PEAR.Files.IncludingFile" />
     <rule ref="PEAR.Functions.FunctionDeclaration" />
     <rule ref="PEAR.NamingConventions.ValidFunctionName">
+        <!-- escapestudios disabled this (severity 0); Symfony style, not PEAR underscores -->
         <exclude name="PEAR.NamingConventions.ValidFunctionName.PrivateNoUnderscore" />
     </rule>
     <rule ref="PSR1" />
     <rule ref="PSR2" />
 
     <!--
-        Rules we abide by but currently not available as sniffers -
-
-            - remove unused use statements (drupal has a sniff, but reports false positives)
-            - ordered import/use statements
-            - classes other than entities, exceptions, and abstract should be final
-            - phpdoc - full stop at end of summary (if any)
-            - phpdoc - full stop at end of description (if any)
-            - phpdoc on const's with @var
+        The two naming sniffs the removed Symfony ref used to pull in transitively.
+        Squiz.Classes.ValidClassName arrives via PSR1/PSR2; Zend.NamingConventions.ValidVariableName
+        is referenced explicitly here. The escapestudios severity-0 suppression of the
+        MemberVarContainsNumbers message is re-applied as an exclude.
     -->
+    <rule ref="Zend.NamingConventions.ValidVariableName">
+        <exclude name="Zend.NamingConventions.ValidVariableName.MemberVarContainsNumbers" />
+        <!--
+            escapestudios suppressed these (severity 0) in v1: Symfony style does not use
+            leading underscores on private members nor forbid digits in variable names.
+            Re-applied here as excludes so the reported-violation set is unchanged from v1.
+        -->
+        <exclude name="Zend.NamingConventions.ValidVariableName.PrivateNoUnderscore" />
+        <exclude name="Zend.NamingConventions.ValidVariableName.ContainsNumbers" />
+    </rule>
 
-    <!-- Additional rules, checking architecture -->
+    <!-- ===== slevomat lint sniffs (replacing the escapestudios "Symfony" unique value) ===== -->
+
+    <!--
+        Complete native type hints + phpdoc<->signature consistency
+        (replaces Symfony.Commenting.TypeHinting + Symfony.Commenting.Annotations).
+    -->
+    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint" />
+    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint" />
+    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint" />
+
+    <!--
+        Remove unused use statements. searchAnnotations=true so uses referenced only in
+        @throws/@param/@var phpdoc are not false-flagged (~47 such uses across the estate).
+    -->
+    <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
+        <properties>
+            <property name="searchAnnotations" value="true" />
+        </properties>
+    </rule>
+    <!--
+        Ordered import/use statements. caseSensitive=false matches php-cs-fixer's
+        ordered_imports (sort_algorithm=alpha), which compares case-insensitively
+        (strcasecmp). Keeping the two in agreement is what stops the fixer<->sniffer
+        import-ordering drift that previously reddened main (issue #19).
+    -->
+    <rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses">
+        <properties>
+            <property name="caseSensitive" value="false" />
+        </properties>
+    </rule>
+    <!-- Redundant use of a class from the current namespace -->
+    <rule ref="SlevomatCodingStandard.Namespaces.UseFromSameNamespace" />
+    <!--
+        Every class must be abstract or final. Cannot express the entity/exception
+        carve-outs, so consumers exclude it per-path for entities (see README / Phase 2).
+        This repo's config/*.php are namespace-less return-scripts (not classes) and its
+        tests are final, so it does not flag here.
+    -->
+    <rule ref="SlevomatCodingStandard.Classes.RequireAbstractOrFinal" />
+
+    <!-- ===== Architecture metrics (unchanged) ===== -->
 
     <rule ref="Generic.Metrics.CyclomaticComplexity">
         <properties>

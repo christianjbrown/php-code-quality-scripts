@@ -5,7 +5,7 @@
 This project
 
 * Installs [PHP Code Sniffer](https://github.com/squizlabs/PHP_CodeSniffer) and [PHP CS Fixer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer)
-* A **PHP Code Sniffer standard** I prefer to use, building upon existing PSR, Symfony, PEAR and Generic standards.
+* A **PHP Code Sniffer standard** I prefer to use (on PHP_CodeSniffer 4), building upon existing PSR, PEAR, Squiz and Generic standards plus [slevomat/coding-standard](https://github.com/slevomat/coding-standard) sniffs (native type hints, unused/sorted uses, abstract-or-final).
 * A set of **PHP CS Fixer rule sets** I prefer to use to clean up code to meet PSR, Symfony, PEAR and Generic standards. One riskier set for new files, and a safer set for existing files. 
 * Wrapper shell scripts
   * `./src/php-cs` is a very simple wrapper around PHP Code Sniffer's own binary, to simplify the command line and load the right standard.
@@ -40,6 +40,18 @@ In the project you wish to use the phpcs standard and phpcsfixer rules in your p
 
 ```shell
 composer require --dev christianjbrown/php-code-quality-scripts
+```
+
+:bulb: This package pulls in [`dealerdirect/phpcodesniffer-composer-installer`](https://github.com/PHPCSStandards/composer-installer), which registers the bundled slevomat sniffs with PHP_CodeSniffer automatically. Composer will ask to trust that plugin the first time; allow it (or add it to `config.allow-plugins` in your `composer.json`):
+
+```json
+{
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
+}
 ```
 
 
@@ -183,7 +195,11 @@ where
 
 The PHPCS standards can be found in `./config` directory.
 
-The only standard in there right now is `./config/standard.xml` which is a set of rules based on various PSR, Symfony, PEAR and Generic standards, with a few more sprinkled in for extra goodness.
+The only standard in there right now is `./config/standard.xml` (name `ChristianBrown`), a set of rules for **PHP_CodeSniffer 4** based on various PSR, PEAR, Squiz, Zend and Generic standards plus [slevomat/coding-standard](https://github.com/slevomat/coding-standard) sniffs, with a few more sprinkled in for extra goodness. (Earlier versions built on `escapestudios/symfony2-coding-standard`, which is PHP_CodeSniffer 3 only; its formatting rules are now handled by the PHP CS Fixer `@Symfony`/`@PhpCsFixer` rule sets and its lint rules by slevomat.)
+
+`config/ChristianBrown/ruleset.xml` is a thin shim that re-exports `standard.xml` under a named directory, so once `config/` is on phpcs `installed_paths` the standard is discoverable as `--standard=ChristianBrown`.
+
+The `php-cs-fix` / `php-cs-fix-diff` wrappers run **PHP CS Fixer and then `phpcbf`** (with this standard), because some slevomat violations (e.g. useless phpdoc `@param`/`@return` annotations) are auto-fixable only by `phpcbf`, not PHP CS Fixer.
 
 
 

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!--
+    Discovery shim so phpcs lists and resolves the standard by the name "ChristianBrown"
+    once config/ is on phpcs installed_paths. The canonical ruleset lives one level up in
+    config/standard.xml (the path the wrapper scripts and consumers reference directly);
+    this file only re-exports it under a named-directory standard.
+-->
+<ruleset name="ChristianBrown">
+    <rule ref="../standard.xml" />
+</ruleset>
