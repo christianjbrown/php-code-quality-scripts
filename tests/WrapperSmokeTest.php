@@ -82,7 +82,9 @@ final class WrapperSmokeTest extends TestCase
         // two nonexistent paths; the array form must pass it as a single file.
         $dir = $this->makeTempDir();
         $file = $dir.'/spaced name.php';
-        file_put_contents($file, "<?php\n\n\$x=1;\n");
+        // Long array syntax is a guaranteed violation under the standard
+        // (Generic.Arrays.DisallowLongArraySyntax), so phpcs exits non-zero.
+        file_put_contents($file, "<?php\n\n\$x = array();\n");
 
         [$exit, $stdout] = $this->runWrapper('php-cs', [$file]);
 
@@ -95,7 +97,8 @@ final class WrapperSmokeTest extends TestCase
     {
         $dir = $this->makeTempDir();
         $file = $dir.'/violation.php';
-        file_put_contents($file, "<?php\n\n\$x=1;\n");
+        // Long array syntax reliably trips Generic.Arrays.DisallowLongArraySyntax.
+        file_put_contents($file, "<?php\n\n\$x = array();\n");
 
         [$exit, $stdout] = $this->runWrapper('php-cs', [$file]);
 
@@ -137,9 +140,13 @@ final class WrapperSmokeTest extends TestCase
     }
 
     /**
-     * @param string             $bin
-     * @param array<int, string> $args
-     * @param null|string        $cwd
+     * The scalar $bin/$cwd need no phpdoc (native types say it all, and slevomat's
+     * TypeHints.ParameterTypeHint.UselessAnnotation would strip a duplicate @param). Only
+     * $args needs a value type for phpstan, given as @phpstan-param so it is not a
+     * positional @param that PEAR.Commenting.FunctionComment.ParamNameNoMatch would then
+     * expect to line up with the first parameter.
+     *
+     * @phpstan-param array<int, string> $args
      *
      * @return array{0: int, 1: string, 2: string} [exitCode, stdout, stderr]
      */

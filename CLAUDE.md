@@ -8,10 +8,14 @@ PHP is held to the very standard it ships, so new code should be indistinguishab
 A distributable Composer package that **provides** code-style tooling for other PHP projects — it
 is not an application or a library of PHP classes. It ships:
 
-- a **PHP_CodeSniffer standard** (`config/standard.xml`, name `ChristianBrown`), built on the
-  `escapestudios/symfony2-coding-standard` `Symfony` ruleset plus PSR1/PSR2 and a curated set of
-  Generic/PEAR sniffs, enforcing tab-width 4, cyclomatic complexity 8 (abs 10), nesting level 5
-  (abs 10), short array syntax, one object structure per file, etc.;
+- a **PHP_CodeSniffer standard** (`config/standard.xml`, name `ChristianBrown`), on
+  **PHP_CodeSniffer 4** — PSR1/PSR2 plus a curated set of Generic/PEAR/Squiz/Zend sniffs and a set
+  of **slevomat** sniffs (native type hints, unused/sorted/same-namespace uses, abstract-or-final),
+  enforcing tab-width 4, cyclomatic complexity 8 (abs 10), nesting level 5 (abs 10), short array
+  syntax, one object structure per file, etc. It used to be built on the
+  `escapestudios/symfony2-coding-standard` `Symfony` ruleset, but that package hard-`conflicts`
+  cs>=4, so its formatting value was ceded to php-cs-fixer (`@Symfony`/`@PhpCsFixer`/`@PSR12` in the
+  rule sets below) and its lint value replaced by the slevomat sniffs;
 - two **PHP CS Fixer rule sets** — `config/Risky.php` (non-backward-compatible rules for new files:
   `declare_strict_types`, `final_class`, `strict_*`, the `:risky` migration sets) and
   `config/Safe.php` (backward-compatible rules for existing/legacy files: `declare_strict_types`
@@ -23,16 +27,23 @@ install to the consumer's `bin/`). `php-api-client-lib` is the reference consume
 
 ## Layout
 
-- **`config/`** — the product. `standard.xml` (phpcs), `Risky.php` / `Safe.php` (php-cs-fixer). The
-  two PHP files are intentionally namespace-less config scripts that `return` a `PhpCsFixer\Config`;
-  each carries a `// phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace` header for that
-  reason. Rulesets can be regenerated at https://mlocati.github.io/php-cs-fixer-configurator/.
+- **`config/`** — the product. `standard.xml` (phpcs, the canonical ruleset referenced by path),
+  `ChristianBrown/ruleset.xml` (a thin discovery shim that re-exports `standard.xml` so `phpcs -i`
+  and `--standard=ChristianBrown` resolve it by name once `config/` is on phpcs `installed_paths`),
+  and `Risky.php` / `Safe.php` (php-cs-fixer). The two PHP files are intentionally namespace-less
+  config scripts that `return` a `PhpCsFixer\Config`; each carries a
+  `// phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace` header for that reason. Rulesets
+  can be regenerated at https://mlocati.github.io/php-cs-fixer-configurator/.
 - **`src/`** — the four bash wrappers, declared as `bin` in `composer.json`:
   - `php-cs` — phpcs with the `ChristianBrown` standard.
   - `php-cs-diff` — phpcs on git-changed + untracked files only.
-  - `php-cs-fix` — php-cs-fixer, defaults to the **Risky** ruleset.
-  - `php-cs-fix-diff` — php-cs-fixer on the git diff: **Risky** on new/untracked files, **Safe** on
-    existing (modified/renamed) files.
+  - `php-cs-fix` — php-cs-fixer (defaults to the **Risky** ruleset) **then `phpcbf`** with the
+    `ChristianBrown` standard. php-cs-fixer does not fix slevomat's phpcs-only violations (e.g.
+    `TypeHints.*UselessAnnotation`), so `phpcbf` runs second to auto-fix those. phpcbf exit codes
+    0/1/2 (nothing to fix / fixable-remaining / non-fixable-remaining) are treated as success;
+    only >= 4 (fixer conflict / process error) fails the run.
+  - `php-cs-fix-diff` — same two-tool pass on the git diff: **Risky** on new/untracked files,
+    **Safe** on existing (modified/renamed) files, followed by `phpcbf` per file.
 - **`tests/`** — PHPUnit smoke tests that `include` the fixer configs and assert the returned
   `Config` object's flags and a spot-check of rule keys. Namespaced under
   `ChristianBrown\CodeQualityScripts\Tests\` (`autoload-dev`).
@@ -40,13 +51,35 @@ install to the consumer's `bin/`). `php-api-client-lib` is the reference consume
 Each wrapper resolves its underlying tool binary across three candidate locations — installed as a
 dependency (`../../../bin`), the consumer's `vendor/bin` (`../../../vendor/bin`), or standalone
 (local `bin/`) — and every default is overridable by env var: `PHP_CS`, `PHP_CS_STANDARD`,
-`PHP_CS_FIXER`, `PHP_CS_FIX_CONFIG`, `PHP_CS_FIX_CONFIG_SAFE`, `PHP_CS_FIX_CONFIG_RISKY`.
+`PHP_CS_FIXER`, `PHP_CS_FIX_CONFIG`, `PHP_CS_FIX_CONFIG_SAFE`, `PHP_CS_FIX_CONFIG_RISKY`, `PHP_CS_BF`
+(the `phpcbf` binary used by the fix wrappers).
+
+### Standard registration (important)
+
+The standard depends on **two** phpcs `installed_paths`: `vendor/slevomat/coding-standard` (so the
+`SlevomatCodingStandard.*` sniffs resolve) and `config/` (so `ChristianBrown` resolves). The
+`dealerdirect/phpcodesniffer-composer-installer` plugin auto-registers slevomat on install, but it
+only knows about vendor packages; the `setup-standards` script (run on `post-install-cmd` /
+`post-update-cmd`, **after** the plugin) then sets `installed_paths` to **both** paths so neither is
+lost. After a clean `composer install`, `./bin/phpcs -i` must list both `SlevomatCodingStandard` and
+`ChristianBrown`. If you touch `setup-standards`, keep both paths.
+
+### Import ordering — do not desync the fixer and the sniffer
+
+php-cs-fixer's `ordered_imports` (`sort_algorithm => alpha`, case-insensitive `strcasecmp`) and
+slevomat's `Namespaces.AlphabeticallySortedUses` both order `use` statements. They must agree on
+**case** or they oscillate and redden `main` (this bit us before). `AlphabeticallySortedUses` is
+pinned to `caseSensitive="false"` in `standard.xml` to match the fixer. Likewise slevomat
+`UnusedUses` (with `searchAnnotations=true`) and php-cs-fixer `no_unused_imports` both prune unused
+uses. After any change touching imports, prove idempotence: `fix-style` → `check-style` (exit 0) →
+`fix-style` again (changes nothing) → `check-style` (exit 0).
 
 ## Commands
 
 Tools install into `bin/` (Composer `bin-dir`), not `vendor/bin/`. Both `bin/` and `vendor/` are
 gitignored and Composer-installed, so run `composer install` first — its `post-install-cmd` runs
-`setup-standards`, which registers the phpcs standard so `./src/php-cs` works.
+`setup-standards`, which registers both the `ChristianBrown` and `SlevomatCodingStandard` phpcs
+standards (see **Standard registration** above) so `./src/php-cs` works.
 
 | Task | Command |
 | --- | --- |
