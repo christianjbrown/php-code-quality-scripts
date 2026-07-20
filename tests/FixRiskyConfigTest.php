@@ -42,6 +42,10 @@ final class FixRiskyConfigTest extends TestCase
         self::assertTrue($rules['concat_space']);
         self::assertArrayHasKey('declare_strict_types', $rules);
         self::assertTrue($rules['declare_strict_types']);
+        self::assertArrayHasKey('no_superfluous_phpdoc_tags', $rules);
+        // Intentionally disabled: stripping scalar @param tags leaves a lone non-first
+        // @param that the phpcs FunctionComment.ParamNameNoMatch sniff rejects.
+        self::assertFalse($rules['no_superfluous_phpdoc_tags']);
         self::assertArrayHasKey('no_unused_imports', $rules);
         self::assertTrue($rules['no_unused_imports']);
         self::assertArrayHasKey('single_quote', $rules);
