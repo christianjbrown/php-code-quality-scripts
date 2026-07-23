@@ -5,8 +5,15 @@ PHP is held to the very standard it ships, so new code should be indistinguishab
 
 ## What this is
 
-A distributable Composer package that **provides** code-style tooling for other PHP projects — it
-is not an application or a library of PHP classes. It ships:
+A distributable Composer package that **provides** code-style and static-analysis tooling for other
+PHP projects — it is mostly not a library of PHP classes (the one exception is the PHPStan rule
+below). It ships:
+
+- a **PHPStan rule** (`src/PhpStan/RequireStaticPrivateMethodRule`, registered for consumers via
+  `config/phpstan.neon`): a private method that never uses `$this` is stateless and should be
+  `static`. Exempts constructors/destructors, already-static methods, and PHPUnit test classes.
+  Consumers opt in by adding `includes: [vendor/christianjbrown/php-code-quality-scripts/config/phpstan.neon]`
+  to their `phpstan.neon.dist`;
 
 - a **PHP_CodeSniffer standard** (`config/standard.xml`, name `ChristianBrown`), on
   **PHP_CodeSniffer 4** — PSR1/PSR2 plus a curated set of Generic/PEAR/Squiz/Zend sniffs and a set
@@ -44,9 +51,15 @@ install to the consumer's `bin/`). `php-api-client-lib` is the reference consume
     only >= 4 (fixer conflict / process error) fails the run.
   - `php-cs-fix-diff` — same two-tool pass on the git diff: **Risky** on new/untracked files,
     **Safe** on existing (modified/renamed) files, followed by `phpcbf` per file.
+- **`src/PhpStan/`** — the one PHP source dir (PSR-4 `ChristianBrown\CodeQualityScripts\PhpStan\` →
+  `src/PhpStan/`), holding the PHPStan rule. It is in the phpcs, phpstan and coverage paths and is
+  held to 100% path coverage like everything else.
 - **`tests/`** — PHPUnit smoke tests that `include` the fixer configs and assert the returned
   `Config` object's flags and a spot-check of rule keys. Namespaced under
-  `ChristianBrown\CodeQualityScripts\Tests\` (`autoload-dev`).
+  `ChristianBrown\CodeQualityScripts\Tests\` (`autoload-dev`). `tests/PhpStan/` holds the rule's
+  `RuleTestCase` test; its `tests/PhpStan/data/` fixtures are deliberately imperfect
+  (`// phpcs:ignoreFile`, and `excludePaths`d from the repo's own phpstan) — the rule is exercised
+  against them in-process by `RuleTestCase`, not by the repo's own analysis.
 
 Each wrapper resolves its underlying tool binary across three candidate locations — installed as a
 dependency (`../../../bin`), the consumer's `vendor/bin` (`../../../vendor/bin`), or standalone
