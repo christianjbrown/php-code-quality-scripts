@@ -28,6 +28,11 @@
         "src/php-cs-fix",
         "src/php-cs-fix-diff"
     ],
+    "autoload": {
+        "psr-4": {
+            "ChristianBrown\\CodeQualityScripts\\PhpStan\\": "src/PhpStan/"
+        }
+    },
     "autoload-dev": {
         "psr-4": {
             "ChristianBrown\\CodeQualityScripts\\Tests\\": "tests/"
@@ -41,13 +46,13 @@
             "clear && ./bin/phpstan analyse"
         ],
         "check-style": [
-            "clear && ./src/php-cs ./config ./tests"
+            "clear && ./src/php-cs ./config ./src/PhpStan ./tests"
         ],
         "check-style-diff": [
             "clear && ./src/php-cs-diff"
         ],
         "fix-style": [
-            "clear && ./src/php-cs-fix ./config ./tests"
+            "clear && ./src/php-cs-fix ./config ./src/PhpStan ./tests"
         ],
         "fix-style-diff": [
             "clear && ./src/php-cs-fix-diff"

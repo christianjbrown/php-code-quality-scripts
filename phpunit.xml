@@ -8,6 +8,7 @@
   <source restrictNotices="true" restrictWarnings="true" ignoreIndirectDeprecations="true">
     <include>
       <directory>config</directory>
+      <directory>src/PhpStan</directory>
     </include>
   </source>
   <coverage includeUncoveredFiles="true" pathCoverage="true">

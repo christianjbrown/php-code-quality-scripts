@@ -3,4 +3,7 @@ parameters:
     tmpDir: .phpstan.cache
     paths:
         - config
+        - src/PhpStan
         - tests
+    excludePaths:
+        - tests/PhpStan/data
