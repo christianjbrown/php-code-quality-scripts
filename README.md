@@ -224,6 +224,63 @@ A set of safer backward-compatible rules based on various PSR, Symfony, PEAR and
 
 
 
+## PHPStan
+
+The package also ships a shared **PHPStan** config at `config/phpstan.neon`, so the analysis policy
+(the level, and a custom rule) lives here once instead of being duplicated in every project.
+
+It sets:
+
+* `level: max`
+* a custom rule, **`RequireStaticPrivateMethodRule`** — a `private` method that never uses `$this` is
+  stateless and should be `static`. Constructors/destructors, already-`static` methods, and PHPUnit
+  `TestCase` classes are exempt.
+
+### Consuming it
+
+`phpstan/phpstan` is a dev dependency of your project (add it if you don't already have it):
+
+```shell
+composer require --dev phpstan/phpstan
+```
+
+Then `include` the shared config from your project's `phpstan.neon.dist` and add **only your project's
+`paths`**:
+
+```neon
+includes:
+    - vendor/christianjbrown/php-code-quality-scripts/config/phpstan.neon
+
+parameters:
+    paths:
+        - src
+        - tests
+```
+
+Add a `stan` composer script to run it (uses the `bin-dir` from **Adding composer scripts** above):
+
+```json
+{
+    "scripts": {
+        "stan": [
+            "clear && ./bin/phpstan analyse"
+        ]
+    }
+}
+```
+
+:bulb: **Why `paths` (and `tmpDir`) stay in your project and not here:** PHPStan resolves relative paths
+against the directory of the file that *declares* them. `paths` written in this package's
+`config/phpstan.neon` would resolve against `vendor/christianjbrown/php-code-quality-scripts/config/`,
+not your project root — so they must live in your own `phpstan.neon.dist`. The level and rules, being
+path-independent, are shared. Change the level or add a rule here once and every consumer picks it up on
+`composer update`.
+
+:bulb: Array parameters (e.g. `ignoreErrors`) set in **both** files are merged/appended by default; to
+override the shared value instead, prefix the key in your own file with `!` (e.g. `ignoreErrors!:`).
+
+
+
 ## :hammer_and_wrench: Development
 
 This section is for working on the package itself, not for consuming it.
