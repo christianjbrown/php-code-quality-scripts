@@ -1,5 +1,5 @@
 {
-    "name": "christianjbrown/php-code-quality-scripts",
+    "name": "christianjbrown/code-quality-scripts",
     "description": "An opinionated PHP_CodeSniffer standard and PHP CS Fixer rule sets (risky and safe), with shell wrappers, for keeping PHP projects to PSR, Symfony, PEAR and Generic standards.",
     "type": "library",
     "license": "MIT",
