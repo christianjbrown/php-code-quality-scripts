@@ -1,6 +1,6 @@
 # PHP Code Quality Scripts
 
-[![CI](https://github.com/christianjbrown/php-code-quality-scripts/actions/workflows/ci.yml/badge.svg)](https://github.com/christianjbrown/php-code-quality-scripts/actions/workflows/ci.yml)
+[![CI](https://github.com/christianjbrown/code-quality-scripts-php/actions/workflows/ci.yml/badge.svg)](https://github.com/christianjbrown/code-quality-scripts-php/actions/workflows/ci.yml)
 
 This project
 
@@ -39,7 +39,7 @@ This project
 In the project you wish to use the phpcs standard and phpcsfixer rules in your project, require this library
 
 ```shell
-composer require --dev christianjbrown/php-code-quality-scripts
+composer require --dev christianjbrown/code-quality-scripts
 ```
 
 :bulb: This package pulls in [`dealerdirect/phpcodesniffer-composer-installer`](https://github.com/PHPCSStandards/composer-installer), which registers the bundled slevomat sniffs with PHP_CodeSniffer automatically. Composer will ask to trust that plugin the first time; allow it (or add it to `config.allow-plugins` in your `composer.json`):
@@ -89,10 +89,10 @@ Alternatively, you can use the original PHP Code Sniffer `phpcs` and PHP CS Fixe
 {
     "scripts": {
         "check-style": [
-            "clear && ./bin/phpcs --standard=vendor/christianjbrown/php-code-quality-scripts/config/standard.xml ./src ./tests"
+            "clear && ./bin/phpcs --standard=vendor/christianjbrown/code-quality-scripts/config/standard.xml ./src ./tests"
         ],
          "fix-style": [
-            "clear && ./bin/php-cs-fixer fix --config=vendor/christianjbrown/php-code-quality-scripts/config/Risky.php ./src ./tests"
+            "clear && ./bin/php-cs-fixer fix --config=vendor/christianjbrown/code-quality-scripts/config/Risky.php ./src ./tests"
         ]
     },
     "config": {
@@ -249,7 +249,7 @@ Then `include` the shared config from your project's `phpstan.neon.dist` and add
 
 ```neon
 includes:
-    - vendor/christianjbrown/php-code-quality-scripts/config/phpstan.neon
+    - vendor/christianjbrown/code-quality-scripts/config/phpstan.neon
 
 parameters:
     paths:
@@ -271,7 +271,7 @@ Add a `stan` composer script to run it (uses the `bin-dir` from **Adding compose
 
 :bulb: **Why `paths` (and `tmpDir`) stay in your project and not here:** PHPStan resolves relative paths
 against the directory of the file that *declares* them. `paths` written in this package's
-`config/phpstan.neon` would resolve against `vendor/christianjbrown/php-code-quality-scripts/config/`,
+`config/phpstan.neon` would resolve against `vendor/christianjbrown/code-quality-scripts/config/`,
 not your project root — so they must live in your own `phpstan.neon.dist`. The level and rules, being
 path-independent, are shared. Change the level or add a rule here once and every consumer picks it up on
 `composer update`.

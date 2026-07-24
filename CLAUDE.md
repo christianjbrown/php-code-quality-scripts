@@ -12,7 +12,7 @@ below). It ships:
 - a **PHPStan rule** (`src/PhpStan/RequireStaticPrivateMethodRule`, registered for consumers via
   `config/phpstan.neon`): a private method that never uses `$this` is stateless and should be
   `static`. Exempts constructors/destructors, already-static methods, and PHPUnit test classes.
-  Consumers opt in by adding `includes: [vendor/christianjbrown/php-code-quality-scripts/config/phpstan.neon]`
+  Consumers opt in by adding `includes: [vendor/christianjbrown/code-quality-scripts/config/phpstan.neon]`
   to their `phpstan.neon.dist`;
 
 - a **PHP_CodeSniffer standard** (`config/standard.xml`, name `ChristianBrown`), on
@@ -29,8 +29,8 @@ below). It ships:
   disabled, no `final_class`);
 - four **bash wrapper scripts** in `src/` that are the package's Composer `bin`.
 
-Consumers `require --dev christianjbrown/php-code-quality-scripts` and call the wrappers (they
-install to the consumer's `bin/`). `php-api-client-lib` is the reference consumer.
+Consumers `require --dev christianjbrown/code-quality-scripts` and call the wrappers (they
+install to the consumer's `bin/`). `api-client` is the reference consumer.
 
 ## Layout
 
